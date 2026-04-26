@@ -93,7 +93,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose, currentSection }) => {
                 onClose();
               }}
               className={`w-full border p-3 text-white transition-colors duration-200 mb-3 cursor-target ${
-                currentSection === 'projects' 
+                currentSection === 'projects'
                   ? 'bg-accent/20 border-accent' 
                   : 'bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent'
               }`}
@@ -103,6 +103,82 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose, currentSection }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
                 <span>Projects</span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                window.location.href = '#all-projects';
+                onClose();
+              }}
+              className={`w-full border p-3 text-white transition-colors duration-200 mb-3 cursor-target ${
+                currentSection === 'all-projects'
+                  ? 'bg-accent/20 border-accent'
+                  : 'bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent'
+              }`}
+            >
+              <div className="flex items-center justify-center space-x-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7h16M4 12h16M4 17h10" />
+                </svg>
+                <span>All Projects</span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                window.location.href = '#skills';
+                onClose();
+              }}
+              className={`w-full border p-3 text-white transition-colors duration-200 mb-3 cursor-target ${
+                currentSection === 'skills'
+                  ? 'bg-accent/20 border-accent'
+                  : 'bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent'
+              }`}
+            >
+              <div className="flex items-center justify-center space-x-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L6 20.75M6 20.75L2.25 17M6 20.75V13.5M14.25 7L18 3.25M18 3.25L21.75 7M18 3.25V10.5" />
+                </svg>
+                <span>Skills</span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                window.location.href = '#experience';
+                onClose();
+              }}
+              className={`w-full border p-3 text-white transition-colors duration-200 mb-3 cursor-target ${
+                currentSection === 'experience'
+                  ? 'bg-accent/20 border-accent'
+                  : 'bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent'
+              }`}
+            >
+              <div className="flex items-center justify-center space-x-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Experience</span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                window.location.href = '#contact';
+                onClose();
+              }}
+              className={`w-full border p-3 text-white transition-colors duration-200 mb-3 cursor-target ${
+                currentSection === 'contact'
+                  ? 'bg-accent/20 border-accent'
+                  : 'bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent'
+              }`}
+            >
+              <div className="flex items-center justify-center space-x-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <span>Contact</span>
               </div>
             </button>
             

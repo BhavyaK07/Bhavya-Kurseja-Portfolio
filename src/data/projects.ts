@@ -2,8 +2,10 @@ export interface Project {
   id: number;
   title: string;
   description: string;
+  highlights?: string[];
   image: string;
   images?: string[];
+  videoUrl?: string;
   technologies: string[];
   buttons?: {
     text: string;
@@ -11,9 +13,10 @@ export interface Project {
     type: 'github' | 'demo' | 'external';
   }[];
   githubUrl?: string;
+  devpostUrl?: string;
   demoUrl?: string;
   externalUrl?: string;
-  buttonText: string;
+  buttonText?: string;
 }
 
 // Placeholder image - you can replace this with actual project images
@@ -22,18 +25,27 @@ const placeholderImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWln
 export const projects: Project[] = [
   {
     id: 1,
-    title: "Project 1",
-    description: "Your first project description here. Add your project details, technologies used, and links.",
+    title: "AutoniMake - Code-Free AI Robotics Platform",
+    description: "Built a code-free robotics platform that lets users train vision models and map predictions to real hardware actions through a web interface.",
+    highlights: [
+      "Developed a real-time OpenCV + CNN inference pipeline for gesture and object recognition.",
+      "Designed a modular Raspberry Pi + ESP32 architecture for AI-triggered control of motors, sensors, and displays.",
+      "Implemented low-latency command mapping from model output to robotic actions for rapid prototyping."
+    ],
     image: placeholderImage,
-    technologies: ['React', 'TypeScript'],
+    technologies: ['Python', 'OpenCV', 'PyTorch', 'ESP32', 'Raspberry Pi'],
     buttonText: "View Project"
   },
   {
     id: 2,
-    title: "Project 2",
-    description: "Your second project description here. Add your project details, technologies used, and links.",
+    title: "PillBot - Autonomous Medicine Delivery Robot",
+    description: "Engineered an autonomous medicine dispensing robot that follows color-coded routes to deliver medication to assigned patient rooms.",
+    highlights: [
+      "Implemented embedded C++ closed-loop line following with real-time sensor feedback and adaptive motor control.",
+      "Built modular room-routing logic by mapping room selection to hue detection, enabling scalable multi-room navigation."
+    ],
     image: placeholderImage,
-    technologies: ['Node.js', 'Express'],
+    technologies: ['VEX IQ', 'C++', 'Embedded Systems', 'Control Systems'],
     buttonText: "View Project"
   }
 ];

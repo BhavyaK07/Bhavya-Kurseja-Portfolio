@@ -17,14 +17,21 @@ function App() {
 
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash === '#projects' || hash === '#about') {
-        setCurrentSection(hash.slice(1));
-      }
-      // If navigating away from detail pages, set section to projects
-      if (hash === '' || hash === '#projects') {
+      const hashSection = window.location.hash.replace('#', '');
+      const validSections = ['projects', 'all-projects', 'about', 'experience', 'skills', 'contact'];
+
+      if (!hashSection) {
         setCurrentSection('projects');
+        return;
       }
+
+      if (validSections.includes(hashSection)) {
+        setCurrentSection(hashSection);
+        return;
+      }
+
+      // Default unknown hashes to projects so main page remains visible.
+      setCurrentSection('projects');
     };
 
     // Set initial section based on hash
@@ -101,7 +108,11 @@ function App() {
         
         {/* Main Content */}
         <div className="lg:ml-[30vw]">
-          {currentSection === 'about' ? <About /> : <ProjectsList />}
+          {currentSection === 'about' ? (
+            <About />
+          ) : (
+            <ProjectsList mode={currentSection === 'all-projects' ? 'all-projects' : 'default'} />
+          )}
         </div>
       </div>
     </div>

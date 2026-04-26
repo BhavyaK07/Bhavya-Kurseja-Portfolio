@@ -52,6 +52,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               {project.description}
             </p>
 
+            {project.highlights && project.highlights.length > 0 && (
+              <ul className="mb-6 space-y-2">
+                {project.highlights.map((highlight, index) => (
+                  <li
+                    key={index}
+                    className="text-gray-300 text-sm lg:text-base leading-relaxed flex items-start"
+                  >
+                    <span className="text-accent mr-2 mt-[2px]">•</span>
+                    <span>{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+
             {/* Technologies */}
             {project.technologies && project.technologies.length > 0 && (
               <div className="mb-6">

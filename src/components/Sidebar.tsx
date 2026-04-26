@@ -37,14 +37,14 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection }) => {
   ];
 
   return (
-    <div className="fixed left-0 top-0 h-full w-[30vw] min-w-[320px] bg-transparent p-6 flex flex-col justify-between" style={{zIndex: 10}}>
-      <div className="pl-16">
+    <div className="fixed left-0 top-0 h-screen w-[30vw] min-w-[320px] bg-transparent px-5 py-4 flex flex-col justify-between" style={{zIndex: 10}}>
+      <div className="pl-12">
         {/* Profile Picture */}
-        <div className="flex flex-col items-center mb-8 mt-12 relative" style={{marginTop: '60px'}}>
+        <div className="flex flex-col items-center mb-5 mt-8 relative" style={{marginTop: '40px'}}>
           <div className="relative">
             <button
               onClick={() => window.location.href = '#about'}
-              className="w-60 h-60 rounded-full overflow-hidden border-4 border-accent/20 flex items-center justify-center hover:border-accent/40 transition-colors duration-200 cursor-target"
+              className="w-44 h-44 rounded-full overflow-hidden border-4 border-accent/20 flex items-center justify-center hover:border-accent/40 transition-colors duration-200 cursor-target"
             >
               <img
                 src={profileImg}
@@ -54,15 +54,15 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection }) => {
             </button>
           </div>
           {/* Translucent box behind text */}
-          <div className="w-full mt-4 p-4 rounded-lg bg-dark-bg/70 backdrop-blur-sm">
-            <h1 className="text-3xl font-bold text-white mb-3 w-full text-center">Bhavya Kurseja</h1>
+          <div className="w-full mt-3 p-3 rounded-lg bg-dark-bg/70 backdrop-blur-sm">
+            <h1 className="text-2xl font-bold text-white mb-2 w-full text-center">Bhavya Kurseja</h1>
             <div className="w-full text-center">
-              <div className="text-white text-lg block">
+              <div className="text-white text-base block">
                 Mechatronics Engineer
               </div>
               <div 
                 onClick={() => window.open('https://uwaterloo.ca/', '_blank')}
-                className="text-gray-400 text-lg hover:text-accent transition-colors duration-200 cursor-pointer block cursor-target"
+                className="text-gray-400 text-base hover:text-accent transition-colors duration-200 cursor-pointer block cursor-target"
               >
                 @ University of Waterloo
               </div>
@@ -71,11 +71,11 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection }) => {
         </div>
         
         {/* Navigation Buttons */}
-        <div className="mb-6" style={{marginTop: '10px'}}>
+        <div className="mb-3" style={{marginTop: '6px'}}>
           <button
             onClick={() => window.location.href = '#projects'}
-            className={`w-full border p-3 text-white transition-colors duration-200 mb-3 cursor-target ${
-              currentSection === 'projects' 
+            className={`w-full border py-2.5 px-3 text-white transition-colors duration-200 mb-2 cursor-target ${
+              currentSection === 'projects'
                 ? 'bg-accent/20 border-accent' 
                 : 'bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent'
             }`}
@@ -87,10 +87,58 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection }) => {
               <span>Projects</span>
             </div>
           </button>
+
+          <button
+            onClick={() => window.location.href = '#skills'}
+            className={`w-full border py-2.5 px-3 text-white transition-colors duration-200 mb-2 cursor-target ${
+              currentSection === 'skills'
+                ? 'bg-accent/20 border-accent'
+                : 'bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent'
+            }`}
+          >
+            <div className="flex items-center justify-center space-x-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L6 20.75M6 20.75L2.25 17M6 20.75V13.5M14.25 7L18 3.25M18 3.25L21.75 7M18 3.25V10.5" />
+              </svg>
+              <span>Skills</span>
+            </div>
+          </button>
+
+          <button
+            onClick={() => window.location.href = '#experience'}
+            className={`w-full border py-2.5 px-3 text-white transition-colors duration-200 mb-2 cursor-target ${
+              currentSection === 'experience'
+                ? 'bg-accent/20 border-accent'
+                : 'bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent'
+            }`}
+          >
+            <div className="flex items-center justify-center space-x-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Experience</span>
+            </div>
+          </button>
+
+          <button
+            onClick={() => window.location.href = '#contact'}
+            className={`w-full border py-2.5 px-3 text-white transition-colors duration-200 mb-2 cursor-target ${
+              currentSection === 'contact'
+                ? 'bg-accent/20 border-accent'
+                : 'bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent'
+            }`}
+          >
+            <div className="flex items-center justify-center space-x-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <span>Contact</span>
+            </div>
+          </button>
           
           <button
             onClick={() => window.open('https://drive.google.com/file/d/1ZFIeIdncx69nHE8jEKPviROorDF3z03T/view?usp=sharing', '_blank')}
-            className="w-full border p-3 text-white transition-colors duration-200 cursor-target bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent"
+            className="w-full border py-2.5 px-3 text-white transition-colors duration-200 cursor-target bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent"
           >
             <div className="flex items-center justify-center space-x-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,7 +150,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection }) => {
         </div>
       </div>
       {/* Social Links */}
-      <div className="flex justify-center space-x-6 mb-2 pl-16" style={{marginTop: '-20px'}}>
+      <div className="flex justify-center space-x-4 mt-3 mb-1 pl-12">
         {socialLinks.map((link) => (
           <a
             key={link.name}
@@ -110,7 +158,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection }) => {
             target={link.url === '#' ? undefined : "_blank"}
             rel={link.url === '#' ? undefined : "noopener noreferrer"}
             onClick={link.url === '#' ? (e) => e.preventDefault() : undefined}
-            className="w-12 h-12 flex items-center justify-center bg-dark-card rounded-lg text-gray-400 hover:text-accent hover:bg-accent/20 transition-colors duration-200 cursor-target"
+            className="w-10 h-10 flex items-center justify-center bg-dark-card rounded-lg text-gray-400 hover:text-accent hover:bg-accent/20 transition-colors duration-200 cursor-target"
             title={link.name}
           >
             {link.icon}
