@@ -119,7 +119,12 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
     [selectedProjectId]
   );
 
-  const featuredProject = projects[featuredIndex] ?? projects[0];
+  const featuredProjects = useMemo(
+    () => projects.filter((project) => project.featured !== false),
+    []
+  );
+
+  const featuredProject = featuredProjects[featuredIndex] ?? featuredProjects[0];
 
   useEffect(() => {
     setProjectsView(mode === 'all-projects' ? 'all' : 'featured');
@@ -141,12 +146,19 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
   useEffect(() => {
     if (projectsView !== 'featured' || mode === 'all-projects' || isCarouselPaused) return;
 
+    if (featuredProjects.length <= 1) return;
+
     const intervalId = window.setInterval(() => {
-      setFeaturedIndex((prev) => (prev + 1) % projects.length);
+      setFeaturedIndex((prev) => (prev + 1) % featuredProjects.length);
     }, 5000);
 
     return () => window.clearInterval(intervalId);
-  }, [isCarouselPaused, mode, projectsView]);
+  }, [featuredProjects.length, isCarouselPaused, mode, projectsView]);
+
+  useEffect(() => {
+    if (featuredProjects.length === 0) return;
+    setFeaturedIndex((prev) => prev % featuredProjects.length);
+  }, [featuredProjects.length]);
 
   const openProjectDetail = (projectId: number) => {
     setSelectedProjectId(projectId);
@@ -198,7 +210,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
             {renderMediaByIndex(featuredProject, 0, false)}
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4 flex items-center justify-between">
               <p className="text-sm text-gray-200">
-                Featured Project {featuredIndex + 1} / {projects.length}
+                Featured Project {featuredIndex + 1} / {featuredProjects.length}
               </p>
               {featuredProject.videoUrl && (
                 <span className="text-xs uppercase tracking-[0.2em] text-accent">Video</span>
@@ -250,13 +262,13 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
 
         <div className="border-t border-dark-border p-4 flex items-center justify-between">
           <button
-            onClick={() => setFeaturedIndex((prev) => (prev - 1 + projects.length) % projects.length)}
+            onClick={() => setFeaturedIndex((prev) => (prev - 1 + featuredProjects.length) % featuredProjects.length)}
             className="bg-dark-bg border border-dark-border hover:border-accent text-gray-200 py-2 px-3 transition-colors duration-200 cursor-target"
           >
             Prev
           </button>
           <div className="flex items-center gap-2">
-            {projects.map((project, index) => (
+            {featuredProjects.map((project, index) => (
               <button
                 key={project.id}
                 onClick={() => setFeaturedIndex(index)}
@@ -268,7 +280,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
             ))}
           </div>
           <button
-            onClick={() => setFeaturedIndex((prev) => (prev + 1) % projects.length)}
+            onClick={() => setFeaturedIndex((prev) => (prev + 1) % featuredProjects.length)}
             className="bg-dark-bg border border-dark-border hover:border-accent text-gray-200 py-2 px-3 transition-colors duration-200 cursor-target"
           >
             Next

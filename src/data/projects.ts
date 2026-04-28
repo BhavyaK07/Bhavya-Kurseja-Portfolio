@@ -1,6 +1,13 @@
+import autoniMakeImage from '../assets/projects/autoniMake.jpeg';
+import auroraImage from '../assets/projects/aurora.png';
+import botAutonomyImage from '../assets/projects/botAutonomy.png';
+import pillBotImage from '../assets/projects/pillBot.png';
+import healthyPandaImage from '../assets/projects/HealthyPanda.jpg';
+
 export interface Project {
   id: number;
   title: string;
+  featured?: boolean;
   description: string;
   highlights?: string[];
   image: string;
@@ -19,8 +26,6 @@ export interface Project {
   buttonText?: string;
 }
 
-// Placeholder image - you can replace this with actual project images
-const placeholderImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzFhMWExYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM2NjY2NjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5Qcm9qZWN0IEltYWdlPC90ZXh0Pjwvc3ZnPg==';
 
 export const projects: Project[] = [
   {
@@ -32,7 +37,7 @@ export const projects: Project[] = [
       "Designed a modular Raspberry Pi + ESP32 architecture for AI-triggered control of motors, sensors, and displays.",
       "Implemented low-latency command mapping from model output to robotic actions for rapid prototyping."
     ],
-    image: placeholderImage,
+    image: autoniMakeImage,
     technologies: ['Python', 'OpenCV', 'PyTorch', 'ESP32', 'Raspberry Pi'],
     buttonText: "View Project"
   },
@@ -44,8 +49,53 @@ export const projects: Project[] = [
       "Implemented embedded C++ closed-loop line following with real-time sensor feedback and adaptive motor control.",
       "Built modular room-routing logic by mapping room selection to hue detection, enabling scalable multi-room navigation."
     ],
-    image: placeholderImage,
+    image: pillBotImage,
     technologies: ['VEX IQ', 'C++', 'Embedded Systems', 'Control Systems'],
+    buttonText: "View Project"
+  },
+  {
+    id: 3,
+    title: "BotAutonomy - Smart Plant Care System",
+    featured: false,
+    description: "Built a smart plant care system that blends hardware, software, and AI to monitor plant health, automate watering, and provide emotional feedback tied to care quality.",
+    highlights: [
+      "Integrated Arduino Uno and ESP32-CAM to track soil moisture, trigger watering through a stepper motor, and capture plant images.",
+      "Developed a machine learning-based plant health evaluation pipeline and a chatbot that lets users interact with their plant.",
+      "Built a Firebase-powered dashboard with real-time telemetry and a points system that rewards or penalizes user care habits."
+    ],
+    image: botAutonomyImage,
+    technologies: ['Arduino Uno', 'ESP32-CAM', 'Firebase', 'Machine Learning', 'Embedded Systems', 'Web Dashboard'],
+    buttonText: "View Project"
+  },
+  {
+    id: 4,
+    title: "Aurora - Volunteer Discovery Platform",
+    featured: false,
+    description: "Built Aurora to make volunteering opportunities more accessible for high school students while giving organizations better candidate discovery tools.",
+    highlights: [
+      "Enabled students to search a large volunteering database with filters by location and topic, with visibility into popularity and volunteer reviews.",
+      "Designed a gamified volunteering journey with rewards and engagement loops to encourage consistent community participation.",
+      "Equipped organizations to post opportunities broadly and filter applicants by resumes and past volunteering experience on Aurora.",
+      "Implemented pseudo-blockchain cloud storage for volunteer hours to support permanent record tracking, security-focused data integrity, and high-speed documentation."
+    ],
+    image: auroraImage,
+    technologies: ['Cloud Computing', 'Pseudo-Blockchain', 'Web App', 'Search & Filtering', 'Gamification', 'Data Security'],
+    buttonText: "View Project"
+  },
+  {
+    id: 5,
+    title: "HealthyPanda - Mental Health Resource Platform",
+    featured: false,
+    description: "A safe and secure platform for teens and people of all ages to rant and reflect on mental health, inspired by the introduction of 988 mental health hotline.",
+    highlights: [
+      "Built with Flask backend and HTML/CSS/JavaScript frontend to create an intuitive user interface for mental health support.",
+      "Implemented a reflection and rant submission system using Python dictionaries, allowing users to 'let it out' safely.",
+      "Integrated a direct link to the 988 suicide hotline website for immediate crisis support access.",
+      "Overcame challenges with reflection prompt display and JavaScript button functionality through effective team collaboration.",
+      "Demonstrated strong teamwork and technical problem-solving to deliver a polished project in a hackathon environment."
+    ],
+    image: healthyPandaImage,
+    technologies: ['Flask', 'HTML', 'CSS', 'JavaScript', 'Python'],
     buttonText: "View Project"
   }
 ];

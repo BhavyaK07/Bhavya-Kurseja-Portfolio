@@ -1,5 +1,6 @@
 import React from 'react';
 import profileImg from '../assets/bhav.jpeg';
+import CurrentlyDoing from './CurrentlyDoing';
 
 interface SidebarProps {
   currentSection: string;
@@ -67,6 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection }) => {
                 @ University of Waterloo
               </div>
             </div>
+            <CurrentlyDoing compact={true} />
           </div>
         </div>
         
