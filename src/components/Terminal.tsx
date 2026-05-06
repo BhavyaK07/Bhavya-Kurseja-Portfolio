@@ -13,11 +13,10 @@ const Terminal: React.FC<TerminalProps> = ({ onExit }) => {
   const terminalRef = useRef<HTMLDivElement>(null);
 
   const commands = {
-    'help': 'Available commands: help, about, projects, skills, contact, clear, exit',
+    'help': 'Available commands: help, about, projects, skills, clear, exit',
     'about': 'Bhavya Kurseja - Mechatronics Engineer at University of Waterloo. Passionate about robotics, quantum computing, and software engineering.',
     'projects': 'Current projects: BotAutonomy (smart plant care), Sumo Bot (Arduino-driven), Robot Ping Pong Opponent (ball launcher), TasteR (food discovery app)',
     'skills': 'Technologies: Arduino, React, TypeScript, Tailwind CSS, Python, CAD, 3D Printing, Electronics, Machine Learning',
-    'contact': 'Email: bdkurseja@gmail.com | LinkedIn: linkedin.com/in/bhavyakurseja/',
     'clear': () => setOutput([]),
     'exit': () => onExit()
   };

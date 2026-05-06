@@ -601,41 +601,6 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
         ))}
       </div>
 
-      {/* Contact Section */}
-      <div id="contact" className="mt-16 border-b border-dark-border pb-4">
-        <h2 className="text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">CONTACT</h2>
-        <div className="w-20 h-1 bg-accent"></div>
-      </div>
-
-      <div className="mt-8 mb-4 bg-dark-card/70 backdrop-blur-sm border border-dark-border p-6 lg:p-8 rounded-2xl">
-        <p className="text-gray-300 mb-6">
-          Open to co-op opportunities in robotics, embedded systems, and automation.
-        </p>
-        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
-          <a
-            href="mailto:bkurseja@uwaterloo.ca"
-            className="bg-accent hover:bg-accent/80 text-white font-semibold py-2 px-4 transition-colors duration-200 inline-flex items-center justify-center"
-          >
-            bkurseja@uwaterloo.ca
-          </a>
-          <a
-            href="https://www.linkedin.com/in/bhavyakurseja/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-dark-bg border border-dark-border hover:border-accent text-gray-200 font-semibold py-2 px-4 transition-colors duration-200 inline-flex items-center justify-center"
-          >
-            LinkedIn
-          </a>
-          <a
-            href="https://devpost.com/bdkurseja"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-dark-bg border border-dark-border hover:border-accent text-gray-200 font-semibold py-2 px-4 transition-colors duration-200 inline-flex items-center justify-center"
-          >
-            Devpost
-          </a>
-        </div>
-      </div>
         </>
       )}
     </div>

@@ -163,25 +163,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose, currentSection }) => {
               </div>
             </button>
 
-            <button
-              onClick={() => {
-                window.location.href = '#contact';
-                onClose();
-              }}
-              className={`w-full border p-3 text-white transition-colors duration-200 mb-3 cursor-target ${
-                currentSection === 'contact'
-                  ? 'bg-accent/20 border-accent'
-                  : 'bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent'
-              }`}
-            >
-              <div className="flex items-center justify-center space-x-2">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <span>Contact</span>
-              </div>
-            </button>
-            
+
             <button
               onClick={() => {
                 window.open('https://drive.google.com/file/d/1ZFIeIdncx69nHE8jEKPviROorDF3z03T/view?usp=sharing', '_blank');

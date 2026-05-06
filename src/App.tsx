@@ -18,7 +18,7 @@ function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hashSection = window.location.hash.replace('#', '');
-      const validSections = ['projects', 'all-projects', 'about', 'experience', 'skills', 'contact'];
+      const validSections = ['projects', 'all-projects', 'about', 'experience', 'skills'];
 
       if (!hashSection) {
         setCurrentSection('projects');
