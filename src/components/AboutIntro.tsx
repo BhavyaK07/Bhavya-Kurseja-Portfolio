@@ -33,13 +33,13 @@ const AboutIntro: React.FC<AboutIntroProps> = ({ variant = 'card' }) => {
         Overview
       </p>
       <h1 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-        About Me
+        First-year Waterloo Mechatronics student building across hardware and software.
       </h1>
 
       <div className="space-y-6 text-lg leading-8 text-gray-300">
         <p>
-          I am a Mechatronics Engineering student at the University of Waterloo,
-          focused on robotics, hardware-software integration, and automation.
+          I am focused on robotics, embedded systems, automation, and practical
+          hardware-software integration.
         </p>
 
         <p>
@@ -56,7 +56,7 @@ const AboutIntro: React.FC<AboutIntroProps> = ({ variant = 'card' }) => {
           {focusAreas.map((focus) => (
             <span
               key={focus}
-              className="bg-dark-bg border border-dark-border text-gray-200 px-3 py-1 text-xs font-semibold tracking-wide"
+              className="info-tile-hover inline-block bg-dark-bg border border-dark-border text-gray-200 px-3 py-1 text-xs font-semibold tracking-wide"
             >
               {focus}
             </span>
@@ -68,7 +68,7 @@ const AboutIntro: React.FC<AboutIntroProps> = ({ variant = 'card' }) => {
         {strengths.map((strength) => (
           <div
             key={strength.title}
-            className="bg-dark-bg/70 border border-dark-border rounded-xl p-4"
+            className="info-tile-hover bg-dark-bg/70 border border-dark-border rounded-xl p-4"
           >
             <h3 className="text-sm font-semibold text-white mb-2">{strength.title}</h3>
             <p className="text-sm text-gray-400 leading-relaxed">{strength.description}</p>
@@ -88,4 +88,3 @@ const AboutIntro: React.FC<AboutIntroProps> = ({ variant = 'card' }) => {
 };
 
 export default AboutIntro;
-

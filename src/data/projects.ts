@@ -2,7 +2,6 @@ import autoniMakeImage from '../assets/projects/autoniMake.jpeg';
 import auroraImage from '../assets/projects/aurora.png';
 import botAutonomyImage from '../assets/projects/botAutonomy.png';
 import pillBotImage from '../assets/projects/pillBot.png';
-import healthyPandaImage from '../assets/projects/HealthyPanda.jpg';
 
 export interface Project {
   id: number;
@@ -31,9 +30,9 @@ export const projects: Project[] = [
   {
     id: 1,
     title: "AutoniMake - Code-Free AI Robotics Platform",
-    description: "Built a code-free robotics platform that lets users train vision models and map predictions to real hardware actions through a web interface.",
+    description: "Built a robotics prototyping platform that lets users connect computer vision model outputs to real hardware actions through a web interface.",
     highlights: [
-      "Developed a real-time OpenCV + CNN inference pipeline for gesture and object recognition.",
+      "Developed a real-time OpenCV pipeline using a custom PyTorch CNN model that reached 99% accuracy.",
       "Designed a modular Raspberry Pi + ESP32 architecture for AI-triggered control of motors, sensors, and displays.",
       "Implemented low-latency command mapping from model output to robotic actions for rapid prototyping."
     ],
@@ -44,13 +43,16 @@ export const projects: Project[] = [
   {
     id: 2,
     title: "PillBot - Autonomous Medicine Delivery Robot",
-    description: "Engineered an autonomous medicine dispensing robot that follows color-coded routes to deliver medication to assigned patient rooms.",
+    description: "Engineered an autonomous medicine dispensing robot that lets a user choose pill quantity and destination room, then follows a matching color-coded route to deliver medication.",
     highlights: [
-      "Implemented embedded C++ closed-loop line following with real-time sensor feedback and adaptive motor control.",
-      "Built modular room-routing logic by mapping room selection to hue detection, enabling scalable multi-room navigation."
+      "Integrated a touch LED sensor, color/optical sensor, distance sensor, inertial sensor, funnel, and conveyor belt into the delivery workflow.",
+      "Built remote-control room and pill-count selection, mapping each destination room to a corresponding colored route.",
+      "Implemented embedded C++ color-line following with a sway-style correction pattern to work around the constraint of having only one color sensor.",
+      "Used touch LED confirmation before departure and return, so a nurse or doctor controls when the robot leaves the hub and when it returns.",
+      "Used distance sensing to dispense the selected number of pills from the conveyor belt reliably at the destination."
     ],
     image: pillBotImage,
-    technologies: ['VEX IQ', 'C++', 'Embedded Systems', 'Control Systems'],
+    technologies: ['VEX IQ', 'C++', 'Touch LED Sensor', 'Color Sensor', 'Distance Sensor', 'Inertial Sensor', 'Control Systems'],
     buttonText: "View Project"
   },
   {
@@ -71,32 +73,15 @@ export const projects: Project[] = [
     id: 4,
     title: "Aurora - Volunteer Discovery Platform",
     featured: false,
-    description: "Built Aurora to make volunteering opportunities more accessible for high school students while giving organizations better candidate discovery tools.",
+    description: "Built Aurora to help high school students find volunteering opportunities while giving organizations tools to post roles and review applicants.",
     highlights: [
       "Enabled students to search a large volunteering database with filters by location and topic, with visibility into popularity and volunteer reviews.",
       "Designed a gamified volunteering journey with rewards and engagement loops to encourage consistent community participation.",
       "Equipped organizations to post opportunities broadly and filter applicants by resumes and past volunteering experience on Aurora.",
-      "Implemented pseudo-blockchain cloud storage for volunteer hours to support permanent record tracking, security-focused data integrity, and high-speed documentation."
+      "Explored a pseudo-blockchain-style storage approach for volunteer hour records with a focus on data integrity and documentation speed."
     ],
     image: auroraImage,
     technologies: ['Cloud Computing', 'Pseudo-Blockchain', 'Web App', 'Search & Filtering', 'Gamification', 'Data Security'],
     buttonText: "View Project"
-  },
-  {
-    id: 5,
-    title: "HealthyPanda - Mental Health Resource Platform",
-    featured: false,
-    description: "A safe and secure platform for teens and people of all ages to rant and reflect on mental health, inspired by the introduction of 988 mental health hotline.",
-    highlights: [
-      "Built with Flask backend and HTML/CSS/JavaScript frontend to create an intuitive user interface for mental health support.",
-      "Implemented a reflection and rant submission system using Python dictionaries, allowing users to 'let it out' safely.",
-      "Integrated a direct link to the 988 suicide hotline website for immediate crisis support access.",
-      "Overcame challenges with reflection prompt display and JavaScript button functionality through effective team collaboration.",
-      "Demonstrated strong teamwork and technical problem-solving to deliver a polished project in a hackathon environment."
-    ],
-    image: healthyPandaImage,
-    technologies: ['Flask', 'HTML', 'CSS', 'JavaScript', 'Python'],
-    buttonText: "View Project"
   }
 ];
-

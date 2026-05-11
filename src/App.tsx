@@ -71,16 +71,16 @@ function App() {
   return (
     <div className="min-h-screen bg-dark-bg relative">
       {/* Dither Background */}
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, opacity: 0.9 }}>
         <Dither
-          waveColor={[0.2, 0.4, 0.8]}
+          waveColor={[0.18, 0.24, 0.34]}
           disableAnimation={false}
-          enableMouseInteraction={true}
+          enableMouseInteraction={false}
           mouseRadius={0.3}
           colorNum={4}
-          waveAmplitude={0.2}
-          waveFrequency={3}
-          waveSpeed={0.05}
+          waveAmplitude={0.22}
+          waveFrequency={2.6}
+          waveSpeed={0.012}
         />
       </div>
       
@@ -107,7 +107,7 @@ function App() {
         </div>
         
         {/* Main Content */}
-        <div className="lg:ml-[30vw]">
+        <div className="lg:ml-[300px]">
           {currentSection === 'about' ? (
             <About />
           ) : (

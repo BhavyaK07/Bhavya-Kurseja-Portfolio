@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { SiDevpost } from 'react-icons/si';
 import { Project, projects } from '../data/projects';
 import AboutIntro from './AboutIntro';
 
@@ -52,9 +53,12 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
       org: 'Virtek Vision International',
       date: 'Jan 2026 - Present',
       location: 'Waterloo, ON',
+      focus: 'Hardware / Software QA',
+      tags: ['Laser Projectors', 'Camera Systems', 'Local AI Vision Models', 'Desktop App', 'Web App', 'Python', 'PowerShell'],
       bullets: [
-        'Executed 1,200+ regression tests across two full validation cycles and verified 90+ software/hardware defects.',
-        'Built 30+ reusable QA automation scripts in Python and PowerShell, saving an estimated 8-12 hours per regression cycle.'
+        'Executed 1,200+ manual regression tests across laser projectors, camera systems running local AI vision models, desktop software, and web applications.',
+        'Verified 90+ software and hardware defects across two full validation cycles.',
+        'Built 30+ reusable Python and PowerShell automation scripts to convert manual QA workflows into repeatable internal test tools.'
       ]
     },
     {
@@ -62,9 +66,12 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
       org: 'Watonomous',
       date: 'Jan 2026 - Present',
       location: 'Waterloo, ON',
+      focus: 'Humanoid Hand Firmware',
+      tags: ['STM32 Nucleo-G474RE', 'C/C++', 'STM32 HAL', 'USART2', '115200 Baud', 'Embedded Firmware'],
       bullets: [
-        'Developed STM32 firmware to support deterministic communication across distributed humanoid robotic subsystems.',
-        'Implemented HAL-based USART2 communication in C/C++ for robust real-time diagnostics and control data exchange.'
+        'Developed STM32 firmware on a Nucleo-G474RE to support communication between actuator-related components for a humanoid hand project.',
+        'Implemented HAL-based USART2 communication in C/C++ at 115200 baud as an early communication layer for the embedded system.',
+        'Structured the firmware for upcoming hardware integration and actuator communication testing.'
       ]
     },
     {
@@ -72,9 +79,12 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
       org: 'Bluevale Electric Car Team',
       date: 'Sept 2022 - June 2025',
       location: 'Waterloo, ON',
+      focus: 'Vehicle Telemetry',
+      tags: ['Raspberry Pi', 'Python', 'PubNub', 'Telemetry', 'Multithreading', 'Electric Vehicle'],
       bullets: [
-        'Engineered a Raspberry Pi telemetry system with a custom buffer protocol, increasing communication efficiency 30x and reducing latency by 95%.',
-        'Built a multi-threaded Python + PubNub telemetry architecture reaching 99% data accuracy across 15+ vehicle parameters.'
+        'Engineered a Raspberry Pi telemetry system for a custom team-built electric car, improving communication efficiency 30x through better data handling, faster driver feedback, and tighter system integration.',
+        'Built a multi-threaded Python + PubNub telemetry architecture reaching 99% data accuracy across vehicle data including battery voltage, current draw, speed, race time, amp-hours consumed, discharge data, motor power, and E-stop power state.',
+        'Created a system architecture diagram to document how vehicle telemetry components worked together.'
       ]
     }
   ];
@@ -82,15 +92,15 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
   const skillGroups = [
     {
       title: 'Programming',
-      skills: ['C++', 'Python', 'Arduino']
+      skills: ['C++', 'Python', 'PowerShell', 'Arduino']
     },
     {
       title: 'Embedded & Hardware',
-      skills: ['STM32', 'ESP32', 'Raspberry Pi', 'Serial Communication', 'Low-level Drivers']
+      skills: ['STM32 HAL', 'USART2', 'ESP32', 'Raspberry Pi', 'Serial Communication', 'Low-level Drivers']
     },
     {
       title: 'Software & Tools',
-      skills: ['Git', 'SolidWorks', 'AutoCAD']
+      skills: ['Git', 'OpenCV', 'Firebase', 'React', 'SolidWorks', 'AutoCAD']
     },
     {
       title: 'Manufacturing',
@@ -98,14 +108,34 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
     }
   ];
 
+  const skillHoverColors = [
+    { bg: 'rgba(37, 99, 235, 0.25)', border: '#3b82f6', text: '#bfdbfe', shadow: 'rgba(59, 130, 246, 0.28)' },
+    { bg: 'rgba(22, 163, 74, 0.22)', border: '#22c55e', text: '#bbf7d0', shadow: 'rgba(34, 197, 94, 0.24)' },
+    { bg: 'rgba(217, 119, 6, 0.23)', border: '#f59e0b', text: '#fde68a', shadow: 'rgba(245, 158, 11, 0.24)' },
+    { bg: 'rgba(124, 58, 237, 0.24)', border: '#8b5cf6', text: '#ddd6fe', shadow: 'rgba(139, 92, 246, 0.24)' },
+    { bg: 'rgba(219, 39, 119, 0.22)', border: '#ec4899', text: '#fbcfe8', shadow: 'rgba(236, 72, 153, 0.22)' },
+    { bg: 'rgba(14, 165, 233, 0.23)', border: '#38bdf8', text: '#bae6fd', shadow: 'rgba(56, 189, 248, 0.23)' },
+    { bg: 'rgba(20, 184, 166, 0.22)', border: '#2dd4bf', text: '#99f6e4', shadow: 'rgba(45, 212, 191, 0.22)' },
+    { bg: 'rgba(239, 68, 68, 0.22)', border: '#f87171', text: '#fecaca', shadow: 'rgba(248, 113, 113, 0.22)' },
+    { bg: 'rgba(132, 204, 22, 0.20)', border: '#a3e635', text: '#d9f99d', shadow: 'rgba(163, 230, 53, 0.20)' },
+    { bg: 'rgba(6, 182, 212, 0.22)', border: '#22d3ee', text: '#a5f3fc', shadow: 'rgba(34, 211, 238, 0.22)' },
+    { bg: 'rgba(168, 85, 247, 0.22)', border: '#c084fc', text: '#e9d5ff', shadow: 'rgba(192, 132, 252, 0.22)' },
+    { bg: 'rgba(244, 63, 94, 0.22)', border: '#fb7185', text: '#fecdd3', shadow: 'rgba(251, 113, 133, 0.22)' },
+    { bg: 'rgba(99, 102, 241, 0.24)', border: '#818cf8', text: '#c7d2fe', shadow: 'rgba(129, 140, 248, 0.24)' },
+    { bg: 'rgba(234, 88, 12, 0.22)', border: '#fb923c', text: '#fed7aa', shadow: 'rgba(251, 146, 60, 0.22)' }
+  ];
+
+  const skillHoverColorByName = new Map(
+    skillGroups
+      .flatMap((group) => group.skills)
+      .map((skill, index) => [skill, skillHoverColors[index % skillHoverColors.length]])
+  );
+
   const featuredStats = [
-    { label: 'Projects Built', value: '10+' },
-    { label: 'Hackathons', value: '9' },
-    { label: 'Experience Roles', value: `${experiences.length}` },
-    {
-      label: 'Project Technologies',
-      value: `${new Set(projects.flatMap((project) => project.technologies)).size}+`
-    }
+    { label: 'Project Funding Raised', value: '$10K+' },
+    { label: 'QA Tests Executed', value: '1,200+' },
+    { label: 'Defects Verified', value: '90+' },
+    { label: 'Telemetry Efficiency Gain', value: '30x' }
   ];
 
   const currentMomentum = [
@@ -159,6 +189,24 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
     if (featuredProjects.length === 0) return;
     setFeaturedIndex((prev) => prev % featuredProjects.length);
   }, [featuredProjects.length]);
+
+  const scrollToCurrentHash = () => {
+    const hash = window.location.hash.replace('#', '');
+    if (!['projects', 'experience', 'skills'].includes(hash)) return;
+
+    window.requestAnimationFrame(() => {
+      document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  };
+
+  useEffect(() => {
+    if (mode === 'all-projects') return;
+
+    scrollToCurrentHash();
+    window.addEventListener('hashchange', scrollToCurrentHash);
+
+    return () => window.removeEventListener('hashchange', scrollToCurrentHash);
+  }, [mode]);
 
   const openProjectDetail = (projectId: number) => {
     setSelectedProjectId(projectId);
@@ -329,6 +377,9 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
               <button onClick={() => openProjectDetail(project.id)} className="text-left cursor-target">
                 <h3 className="text-lg font-bold text-white mb-3">{project.title}</h3>
               </button>
+              <p className="text-sm leading-relaxed text-gray-400 mb-4">
+                {project.description}
+              </p>
               <div className="flex flex-wrap gap-2">
                 {project.technologies.map((tech) => (
                   <span
@@ -401,12 +452,17 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
           </div>
 
           <h3 className="text-2xl lg:text-3xl font-bold text-white mb-4">{selectedProject.title}</h3>
-          <p className="text-gray-300 text-base leading-relaxed mb-6">{selectedProject.description}</p>
+          <div className="mb-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">
+              Overview
+            </p>
+            <p className="text-gray-300 text-base leading-relaxed">{selectedProject.description}</p>
+          </div>
 
           {selectedProject.highlights && selectedProject.highlights.length > 0 && (
             <div className="mb-6">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">
-                Project Highlights
+                What I Built
               </p>
               <ul className="space-y-2">
                 {selectedProject.highlights.map((highlight) => (
@@ -457,9 +513,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
                 className="w-11 h-11 flex items-center justify-center bg-dark-bg border border-dark-border text-gray-300 hover:text-accent hover:border-accent transition-colors duration-200 cursor-target"
                 title="Devpost"
               >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M5 3h10.2c.96 0 1.86.48 2.39 1.28l4.2 6.27c.55.82.55 1.88 0 2.7l-4.2 6.27A2.87 2.87 0 0 1 15.2 21H5V3zm3 3v12h6.6c.32 0 .62-.16.8-.43l3.54-5.29a.94.94 0 0 0 0-1.06L15.4 5.93a.95.95 0 0 0-.8-.43H8z" />
-                </svg>
+                <SiDevpost className="w-5 h-5" />
               </a>
             )}
           </div>
@@ -482,125 +536,165 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
         </>
       ) : (
         <>
-      {/* About Section (main page) */}
-      <div className="mb-16">
-        <div className="max-w-4xl">
-          <AboutIntro />
-          <div className="mt-6 bg-dark-card/70 backdrop-blur-sm border border-dark-border p-6 lg:p-8 rounded-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">
-              Education
+          <section className="mb-12 max-w-4xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent mb-3">
+              Bhavya Kurseja
             </p>
-            <h2 className="text-xl lg:text-2xl font-bold text-white">
-              University of Waterloo
-            </h2>
-            <p className="text-gray-300 mt-2">
-              Bachelor of Applied Science in Mechatronics Engineering (Co-op Program)
+            <h1 className="text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight">
+              First-year Waterloo Mechatronics student building robotics, embedded systems, and automation projects.
+            </h1>
+            <p className="text-lg leading-8 text-gray-300 max-w-3xl">
+              I build across firmware, hardware, and software, with projects focused on real devices,
+              controls, sensing, and practical hardware-software integration.
             </p>
-            <p className="text-gray-400 text-sm mt-2">
-              Sept 2025 - Present | Waterloo, ON
-            </p>
+
+            <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3">
+              {featuredStats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="bg-dark-card/70 backdrop-blur-sm border border-dark-border p-4"
+                >
+                  <p className="text-xs uppercase tracking-[0.2em] text-gray-400">{stat.label}</p>
+                  <p className="text-2xl font-bold text-white mt-2">{stat.value}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <div id="projects" className="scroll-mt-8 mb-10 border-b border-dark-border pb-4">
+            <h2 className="text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">FEATURED PROJECTS</h2>
+            <div className="w-20 h-1 bg-accent"></div>
           </div>
 
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {featuredStats.map((stat) => (
+          {projectsView === 'featured' && renderFeaturedProjects()}
+          {projectsView === 'detail' && renderProjectDetail()}
+
+          <div id="experience" className="scroll-mt-8 mt-16 border-b border-dark-border pb-4">
+            <h2 className="text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">EXPERIENCE</h2>
+            <div className="w-20 h-1 bg-accent"></div>
+          </div>
+
+          <div className="mt-8 relative">
+            <div className="absolute left-3 top-3 bottom-3 hidden md:block w-px bg-gradient-to-b from-accent via-dark-border to-dark-border" />
+            <div className="space-y-5">
+            {experiences.map((experience) => (
+              <article key={`${experience.org}-${experience.role}`} className="relative md:pl-10">
+                <div className="absolute left-0 top-6 hidden md:flex h-6 w-6 items-center justify-center rounded-full border border-accent bg-dark-bg">
+                  <span className="h-2.5 w-2.5 rounded-full bg-accent" />
+                </div>
+
+                <div className="bg-dark-card/75 backdrop-blur-sm border border-dark-border p-5 lg:p-6 transition-colors duration-200 hover:border-accent/50">
+                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-4">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-accent mb-2">
+                        {experience.focus}
+                      </p>
+                      <h3 className="text-lg lg:text-xl font-bold text-white">{experience.role}</h3>
+                      <p className="text-gray-300">{experience.org}</p>
+                    </div>
+                    <div className="lg:text-right">
+                      <p className="text-sm font-medium text-gray-300">{experience.date}</p>
+                      <p className="text-sm text-gray-500">{experience.location}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {experience.tags.map((tag) => (
+                      <span
+                        key={`${experience.org}-${tag}`}
+                        className="bg-dark-bg border border-dark-border text-gray-300 px-2 py-1 text-xs font-mono"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <ul className="space-y-2">
+                    {experience.bullets.map((bullet) => (
+                      <li key={bullet} className="text-gray-300 text-sm lg:text-base leading-relaxed flex items-start">
+                        <span className="text-accent mr-2 mt-[2px]">•</span>
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            ))}
+            </div>
+          </div>
+
+          <div id="skills" className="scroll-mt-8 mt-16 border-b border-dark-border pb-4">
+            <h2 className="text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">SKILLS</h2>
+            <div className="w-20 h-1 bg-accent"></div>
+          </div>
+
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+            {skillGroups.map((group) => (
               <div
-                key={stat.label}
-                className="bg-dark-card/70 backdrop-blur-sm border border-dark-border p-4 rounded-xl"
+                key={group.title}
+                className="bg-dark-card/70 backdrop-blur-sm border border-dark-border p-5"
               >
-                <p className="text-xs uppercase tracking-[0.2em] text-gray-400">{stat.label}</p>
-                <p className="text-2xl font-bold text-white mt-2">{stat.value}</p>
+                <h3 className="text-sm font-semibold text-accent mb-3 uppercase tracking-wide">
+                  {group.title}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {group.skills.map((skill) => {
+                    const hoverColor = skillHoverColorByName.get(skill) ?? skillHoverColors[0];
+
+                    return (
+                      <span
+                        key={skill}
+                        className="skill-pill-hover inline-block bg-dark-bg border border-dark-border text-gray-300 px-2 py-1 text-xs font-mono"
+                        style={{
+                          '--skill-hover-bg': hoverColor.bg,
+                          '--skill-hover-border': hoverColor.border,
+                          '--skill-hover-text': hoverColor.text,
+                          '--skill-hover-shadow': hoverColor.shadow
+                        } as React.CSSProperties}
+                      >
+                        {skill}
+                      </span>
+                    );
+                  })}
+                </div>
               </div>
             ))}
           </div>
 
-          <div className="mt-4 bg-dark-card/70 backdrop-blur-sm border border-dark-border p-6 rounded-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">
-              Current Momentum
-            </p>
-            <ul className="space-y-2">
-              {currentMomentum.map((item) => (
-                <li key={item} className="text-gray-300 text-sm lg:text-base leading-relaxed flex items-start">
-                  <span className="text-accent mr-2 mt-[2px]">•</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* Header */}
-      <div id="projects" className="mb-12 border-b border-dark-border pb-4">
-        <h1 className="text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">PROJECTS</h1>
-        <div className="w-20 h-1 bg-accent"></div>
-      </div>
-
-      {projectsView === 'featured' && renderFeaturedProjects()}
-      {projectsView === 'detail' && renderProjectDetail()}
-
-      {/* Experience Section */}
-      <div id="experience" className="mt-16 border-b border-dark-border pb-4">
-        <h2 className="text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">EXPERIENCE</h2>
-        <div className="w-20 h-1 bg-accent"></div>
-      </div>
-
-      <div className="mt-8 grid grid-cols-1 gap-4">
-        {experiences.map((experience) => (
-          <div
-            key={`${experience.org}-${experience.role}`}
-            className="bg-dark-card/70 backdrop-blur-sm border border-dark-border p-6 rounded-2xl"
-          >
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 mb-4">
-              <div>
-                <h3 className="text-lg lg:text-xl font-bold text-white">{experience.role}</h3>
-                <p className="text-gray-300">{experience.org}</p>
-              </div>
-              <p className="text-sm text-gray-400">
-                {experience.date} | {experience.location}
+          <section className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="bg-dark-card/70 backdrop-blur-sm border border-dark-border p-6 lg:p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">
+                Education
+              </p>
+              <h2 className="text-xl lg:text-2xl font-bold text-white">
+                University of Waterloo
+              </h2>
+              <p className="text-gray-300 mt-2">
+                Bachelor of Applied Science in Mechatronics Engineering (Co-op Program)
+              </p>
+              <p className="text-gray-400 text-sm mt-2">
+                Sept 2025 - Present | Waterloo, ON
               </p>
             </div>
 
-            <ul className="space-y-2">
-              {experience.bullets.map((bullet) => (
-                <li key={bullet} className="text-gray-300 text-sm lg:text-base leading-relaxed flex items-start">
-                  <span className="text-accent mr-2 mt-[2px]">•</span>
-                  <span>{bullet}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-
-      {/* Skills Section */}
-      <div id="skills" className="mt-16 border-b border-dark-border pb-4">
-        <h2 className="text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">SKILLS</h2>
-        <div className="w-20 h-1 bg-accent"></div>
-      </div>
-
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        {skillGroups.map((group) => (
-          <div
-            key={group.title}
-            className="bg-dark-card/70 backdrop-blur-sm border border-dark-border p-5 rounded-xl"
-          >
-            <h3 className="text-sm font-semibold text-accent mb-3 uppercase tracking-wide">
-              {group.title}
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {group.skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="bg-dark-bg border border-dark-border text-gray-300 px-2 py-1 text-xs font-mono"
-                >
-                  {skill}
-                </span>
-              ))}
+            <div className="bg-dark-card/70 backdrop-blur-sm border border-dark-border p-6 lg:p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">
+                Current Focus
+              </p>
+              <ul className="space-y-2">
+                {currentMomentum.map((item) => (
+                  <li key={item} className="text-gray-300 text-sm lg:text-base leading-relaxed flex items-start">
+                    <span className="text-accent mr-2 mt-[2px]">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
-        ))}
-      </div>
+          </section>
 
+          <section className="mt-16 max-w-4xl">
+            <AboutIntro />
+          </section>
         </>
       )}
     </div>
@@ -608,4 +702,3 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
 };
 
 export default ProjectsList;
-

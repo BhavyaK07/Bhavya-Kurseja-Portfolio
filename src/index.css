@@ -16,8 +16,22 @@
     @apply transition-all duration-300 ease-in-out hover:shadow-lg hover:shadow-accent/20 hover:-translate-y-1;
   }
 
+  .info-tile-hover {
+    @apply transition-all duration-300 ease-out hover:scale-105 hover:border-accent hover:bg-blue-950/50 hover:text-blue-100 hover:shadow-lg hover:shadow-accent/20;
+  }
+
+  .skill-pill-hover {
+    @apply transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg;
+  }
+
+  .skill-pill-hover:hover {
+    background-color: var(--skill-hover-bg);
+    border-color: var(--skill-hover-border);
+    color: var(--skill-hover-text);
+    box-shadow: 0 10px 24px var(--skill-hover-shadow);
+  }
+
   .social-link {
     @apply transition-colors duration-200 hover:text-accent;
   }
 }
-
