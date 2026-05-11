@@ -38,6 +38,8 @@ export const projects: Project[] = [
     ],
     image: autoniMakeImage,
     technologies: ['Python', 'OpenCV', 'PyTorch', 'ESP32', 'Raspberry Pi'],
+    githubUrl: 'https://github.com/BhavyaK07/Autonimake',
+    devpostUrl: 'https://devpost.com/software/autonimake',
     buttonText: "View Project"
   },
   {
@@ -53,6 +55,7 @@ export const projects: Project[] = [
     ],
     image: pillBotImage,
     technologies: ['VEX IQ', 'C++', 'Touch LED Sensor', 'Color Sensor', 'Distance Sensor', 'Inertial Sensor', 'Control Systems'],
+    githubUrl: 'https://github.com/BhavyaK07/MTE100-VEXROBOT-PROJECT',
     buttonText: "View Project"
   },
   {
@@ -67,6 +70,8 @@ export const projects: Project[] = [
     ],
     image: botAutonomyImage,
     technologies: ['Arduino Uno', 'ESP32-CAM', 'Firebase', 'Machine Learning', 'Embedded Systems', 'Web Dashboard'],
+    githubUrl: 'https://github.com/BhavyaK07/BotAutonomy',
+    devpostUrl: 'https://dorahacks.io/buidl/26416/',
     buttonText: "View Project"
   },
   {
@@ -82,6 +87,8 @@ export const projects: Project[] = [
     ],
     image: auroraImage,
     technologies: ['Cloud Computing', 'Pseudo-Blockchain', 'Web App', 'Search & Filtering', 'Gamification', 'Data Security'],
+    githubUrl: 'https://github.com/BhavyaK07/Aurora',
+    devpostUrl: 'https://dorahacks.io/buidl/13404',
     buttonText: "View Project"
   }
 ];

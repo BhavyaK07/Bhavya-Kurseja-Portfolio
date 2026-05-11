@@ -6,7 +6,14 @@ interface SidebarProps {
   currentSection: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ currentSection }) => {
+const Sidebar: React.FC<SidebarProps> = () => {
+  const navButtonClass = 'w-full border py-2.5 px-3 text-white transition-colors duration-200 mb-2 cursor-target bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent';
+
+  const navigateToHash = (event: React.MouseEvent<HTMLButtonElement>, hash: string) => {
+    event.currentTarget.blur();
+    window.location.href = hash;
+  };
+
   const socialLinks = [
     {
       name: 'LinkedIn',
@@ -84,12 +91,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection }) => {
         {/* Navigation Buttons */}
         <div className="mb-3" style={{marginTop: '6px'}}>
           <button
-            onClick={() => window.location.href = '#projects'}
-            className={`w-full border py-2.5 px-3 text-white transition-colors duration-200 mb-2 cursor-target ${
-              currentSection === 'projects'
-                ? 'bg-accent/20 border-accent' 
-                : 'bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent'
-            }`}
+            onClick={(event) => navigateToHash(event, '#projects')}
+            className={navButtonClass}
           >
             <div className="flex items-center justify-center space-x-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,12 +103,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection }) => {
           </button>
 
           <button
-            onClick={() => window.location.href = '#skills'}
-            className={`w-full border py-2.5 px-3 text-white transition-colors duration-200 mb-2 cursor-target ${
-              currentSection === 'skills'
-                ? 'bg-accent/20 border-accent'
-                : 'bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent'
-            }`}
+            onClick={(event) => navigateToHash(event, '#skills')}
+            className={navButtonClass}
           >
             <div className="flex items-center justify-center space-x-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,12 +115,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection }) => {
           </button>
 
           <button
-            onClick={() => window.location.href = '#experience'}
-            className={`w-full border py-2.5 px-3 text-white transition-colors duration-200 mb-2 cursor-target ${
-              currentSection === 'experience'
-                ? 'bg-accent/20 border-accent'
-                : 'bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent'
-            }`}
+            onClick={(event) => navigateToHash(event, '#experience')}
+            className={navButtonClass}
           >
             <div className="flex items-center justify-center space-x-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,7 +128,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection }) => {
 
 
           <button
-            onClick={() => window.open('https://drive.google.com/file/d/1ZFIeIdncx69nHE8jEKPviROorDF3z03T/view?usp=sharing', '_blank')}
+            onClick={() => window.open('https://drive.google.com/file/d/1v1edY6MUIAm1ooQ5lBmq0jiLxq4DtPKq/view?usp=sharing', '_blank')}
             className="w-full border py-2.5 px-3 text-white transition-colors duration-200 cursor-target bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent"
           >
             <div className="flex items-center justify-center space-x-2">

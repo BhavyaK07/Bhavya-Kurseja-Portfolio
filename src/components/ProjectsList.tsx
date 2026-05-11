@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { FaGithub } from 'react-icons/fa';
 import { SiDevpost } from 'react-icons/si';
 import { Project, projects } from '../data/projects';
 import AboutIntro from './AboutIntro';
@@ -11,6 +12,8 @@ type ProjectMediaItem = {
   type: 'image' | 'video';
   src: string;
 };
+
+type ProjectMediaFit = 'cover' | 'contain' | 'natural';
 
 const getProjectMedia = (project: Project): ProjectMediaItem[] => {
   const imageSources = project.images && project.images.length > 0 ? project.images : [project.image];
@@ -35,6 +38,41 @@ const getDevpostUrl = (project: Project): string | undefined => {
     (button) => button.url.includes('devpost.com') || /devpost/i.test(button.text)
   );
   return devpostButton?.url;
+};
+
+const ProjectExternalLinks: React.FC<{ project: Project; className?: string }> = ({ project, className = '' }) => {
+  const links = [
+    {
+      name: 'GitHub',
+      url: getGithubUrl(project),
+      icon: <FaGithub className="w-5 h-5" />
+    },
+    {
+      name: 'Devpost',
+      url: getDevpostUrl(project),
+      icon: <SiDevpost className="w-5 h-5" />
+    }
+  ].filter((link): link is { name: string; url: string; icon: JSX.Element } => Boolean(link.url));
+
+  if (links.length === 0) return null;
+
+  return (
+    <div className={`flex items-center gap-3 ${className}`}>
+      {links.map((link) => (
+        <a
+          key={link.name}
+          href={link.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-11 h-11 flex items-center justify-center bg-dark-bg border border-dark-border text-gray-300 hover:text-accent hover:border-accent transition-colors duration-200 cursor-target"
+          title={link.name}
+          aria-label={`Open ${project.title} on ${link.name}`}
+        >
+          {link.icon}
+        </a>
+      ))}
+    </div>
+  );
 };
 
 const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
@@ -214,11 +252,23 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
     setProjectsView('detail');
   };
 
-  const renderMediaByIndex = (project: Project, mediaIndex: number, withControls = true) => {
+  const renderMediaByIndex = (
+    project: Project,
+    mediaIndex: number,
+    withControls = true,
+    fit: ProjectMediaFit = 'cover'
+  ) => {
     const mediaItems = getProjectMedia(project);
     const mediaItem = mediaItems[mediaIndex] ?? mediaItems[0];
 
     if (!mediaItem) return null;
+
+    const mediaClassName =
+      fit === 'cover'
+        ? 'w-full h-full object-cover'
+        : fit === 'contain'
+          ? 'w-full h-full object-contain'
+          : 'max-w-full h-auto max-h-[520px] object-contain mx-auto';
 
     if (mediaItem.type === 'video') {
       return (
@@ -227,7 +277,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
           controls={withControls}
           muted={!withControls}
           playsInline
-          className="w-full h-full object-cover bg-black"
+          className={`${mediaClassName} bg-black`}
         />
       );
     }
@@ -236,7 +286,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
       <img
         src={mediaItem.src}
         alt={project.title}
-        className="w-full h-full object-cover"
+        className={mediaClassName}
       />
     );
   };
@@ -254,8 +304,8 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
           }`}
           key={featuredProject.id}
         >
-          <div className="relative h-64 lg:h-full min-h-[280px]">
-            {renderMediaByIndex(featuredProject, 0, false)}
+          <div className="relative aspect-[4/3] lg:aspect-auto lg:h-full min-h-[280px] bg-dark-bg flex items-center justify-center overflow-hidden p-4">
+            {renderMediaByIndex(featuredProject, 0, false, 'contain')}
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4 flex items-center justify-between">
               <p className="text-sm text-gray-200">
                 Featured Project {featuredIndex + 1} / {featuredProjects.length}
@@ -297,13 +347,14 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
               </div>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <button
                 onClick={() => openProjectDetail(featuredProject.id)}
                 className="bg-accent hover:bg-accent/80 text-white font-semibold py-2 px-4 transition-colors duration-200 cursor-target"
               >
                 View Project Details
               </button>
+              <ProjectExternalLinks project={featuredProject} />
             </div>
           </div>
         </div>
@@ -369,8 +420,8 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
             className="text-left bg-dark-card/70 backdrop-blur-sm border border-dark-border rounded-2xl overflow-hidden hover:border-accent/50 transition-colors duration-200"
           >
             <button onClick={() => openProjectDetail(project.id)} className="w-full cursor-target">
-              <div className="h-48">
-                {renderMediaByIndex(project, 0, false)}
+              <div className="aspect-[4/3] bg-dark-bg flex items-center justify-center p-4 overflow-hidden">
+                {renderMediaByIndex(project, 0, false, 'contain')}
               </div>
             </button>
             <div className="p-5">
@@ -390,6 +441,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
                   </span>
                 ))}
               </div>
+              <ProjectExternalLinks project={project} className="mt-5" />
             </div>
           </div>
         ))}
@@ -402,8 +454,8 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
 
     return (
       <div className="mt-8 bg-dark-card/70 backdrop-blur-sm border border-dark-border rounded-2xl overflow-hidden">
-        <div className="h-64 lg:h-[420px]">
-          {renderMediaByIndex(selectedProject, selectedMediaIndex)}
+        <div className="min-h-64 lg:min-h-[420px] bg-dark-bg flex items-center justify-center p-4 overflow-hidden">
+          {renderMediaByIndex(selectedProject, selectedMediaIndex, true, 'contain')}
         </div>
 
         {getProjectMedia(selectedProject).length > 1 && (
@@ -491,32 +543,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            {getGithubUrl(selectedProject) && (
-              <a
-                href={getGithubUrl(selectedProject)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-11 h-11 flex items-center justify-center bg-dark-bg border border-dark-border text-gray-300 hover:text-accent hover:border-accent transition-colors duration-200 cursor-target"
-                title="GitHub"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                </svg>
-              </a>
-            )}
-            {getDevpostUrl(selectedProject) && (
-              <a
-                href={getDevpostUrl(selectedProject)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-11 h-11 flex items-center justify-center bg-dark-bg border border-dark-border text-gray-300 hover:text-accent hover:border-accent transition-colors duration-200 cursor-target"
-                title="Devpost"
-              >
-                <SiDevpost className="w-5 h-5" />
-              </a>
-            )}
-          </div>
+          <ProjectExternalLinks project={selectedProject} />
         </div>
       </div>
     );
