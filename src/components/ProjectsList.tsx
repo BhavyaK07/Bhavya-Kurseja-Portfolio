@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FaGithub } from 'react-icons/fa';
+import { FaEnvelope, FaFileAlt, FaGithub, FaLinkedin } from 'react-icons/fa';
 import { SiDevpost } from 'react-icons/si';
 import { Project, projects } from '../data/projects';
-import AboutIntro from './AboutIntro';
 
 interface ProjectsListProps {
   mode?: 'default' | 'all-projects';
@@ -89,7 +88,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
     {
       role: 'Quality Assurance',
       org: 'Virtek Vision International',
-      date: 'Jan 2026 - Present',
+      date: 'Jan 2026 - Apr 2026',
       location: 'Waterloo, ON',
       focus: 'Hardware / Software QA',
       tags: ['Laser Projectors', 'Camera Systems', 'Local AI Vision Models', 'Desktop App', 'Web App', 'Python', 'PowerShell'],
@@ -100,16 +99,16 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
       ]
     },
     {
-      role: 'Humanoid Sub-team - Embedded Systems',
+      role: 'Humanoid Perception & Embedded Systems Team',
       org: 'Watonomous',
       date: 'Jan 2026 - Present',
       location: 'Waterloo, ON',
-      focus: 'Humanoid Hand Firmware',
-      tags: ['STM32 Nucleo-G474RE', 'C/C++', 'STM32 HAL', 'USART2', '115200 Baud', 'Embedded Firmware'],
+      focus: 'Robotics Perception / Embedded Systems',
+      tags: ['ROS2', 'VSLAM', 'Intel RealSense D435i', 'RGB-D', 'IMU', 'IR Sensors', 'STM32', 'C/C++', 'STM32 HAL', 'USART2'],
       bullets: [
-        'Developed STM32 firmware on a Nucleo-G474RE to support communication between actuator-related components for a humanoid hand project.',
-        'Implemented HAL-based USART2 communication in C/C++ at 115200 baud as an early communication layer for the embedded system.',
-        'Structured the firmware for upcoming hardware integration and actuator communication testing.'
+        'Implementing VSLAM with an Intel RealSense D435i using ROS2, utilizing RGB-D and IMU data streams for localization and 3D map generation.',
+        'Integrating camera and IR sensor fusion pipelines to enhance obstacle detection, navigation accuracy, and robustness in complex environments.',
+        'Developed embedded firmware on STM32 microcontrollers, implementing HAL-based USART2 communication in C/C++ for reliable inter-device data exchange and robotic subsystem coordination.'
       ]
     },
     {
@@ -169,11 +168,11 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
       .map((skill, index) => [skill, skillHoverColors[index % skillHoverColors.length]])
   );
 
-  const featuredStats = [
-    { label: 'Project Funding Raised', value: '$10K+' },
-    { label: 'QA Tests Executed', value: '1,200+' },
-    { label: 'Defects Verified', value: '90+' },
-    { label: 'Telemetry Efficiency Gain', value: '30x' }
+  const focusTiles = [
+    { title: 'Embedded Robotics', detail: 'Physical systems, sensors, and control' },
+    { title: 'Computer Vision', detail: 'AI models connected to real hardware' },
+    { title: 'Firmware + Control', detail: 'C/C++, serial comms, and device logic' },
+    { title: 'Hardware Integration', detail: 'Mechanical, electrical, and software builds' }
   ];
 
   const currentMomentum = [
@@ -181,6 +180,26 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
     'Actively expanding robotics integration projects across sensing, control, and automation workflows.',
     'Open to co-op opportunities where hardware and software engineering intersect.'
   ];
+
+  const contactLinks = [
+    {
+      label: 'LinkedIn',
+      href: 'https://www.linkedin.com/in/bhavyakurseja/',
+      icon: <FaLinkedin className="w-4 h-4" />
+    },
+    {
+      label: 'GitHub',
+      href: 'https://github.com/BhavyaK07',
+      icon: <FaGithub className="w-4 h-4" />
+    },
+    {
+      label: 'Resume',
+      href: 'https://drive.google.com/file/d/12_EKJfEjW6Z0IJVDUpoY6-5avS1odiMw/view?usp=sharing',
+      icon: <FaFileAlt className="w-4 h-4" />
+    }
+  ];
+
+  const emailHref = 'mailto:bdkurseja@gmail.com?subject=Embedded%20Robotics%20%2F%20Computer%20Vision%20Opportunity&body=Hi%20Bhavya%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20wanted%20to%20reach%20out%20about...';
 
   const selectedProject = useMemo(
     () => projects.find((project) => project.id === selectedProjectId) ?? null,
@@ -568,7 +587,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
               Bhavya Kurseja
             </p>
             <h1 className="text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight">
-              First-year Waterloo Mechatronics student building robotics, embedded systems, and automation projects.
+              Mechatronics student building robotics and embedded systems.
             </h1>
             <p className="text-lg leading-8 text-gray-300 max-w-3xl">
               I build across firmware, hardware, and software, with projects focused on real devices,
@@ -576,13 +595,17 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
             </p>
 
             <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3">
-              {featuredStats.map((stat) => (
+              {focusTiles.map((tile) => (
                 <div
-                  key={stat.label}
-                  className="bg-dark-card/70 backdrop-blur-sm border border-dark-border p-4"
+                  key={tile.title}
+                  className="focus-tile-hover group bg-dark-card/70 backdrop-blur-sm border border-dark-border p-4"
                 >
-                  <p className="text-xs uppercase tracking-[0.2em] text-gray-400">{stat.label}</p>
-                  <p className="text-2xl font-bold text-white mt-2">{stat.value}</p>
+                  <p className="text-sm font-semibold text-white transition-colors duration-300 group-hover:text-blue-100">
+                    {tile.title}
+                  </p>
+                  <p className="text-xs leading-5 text-gray-400 mt-2 transition-colors duration-300 group-hover:text-gray-300">
+                    {tile.detail}
+                  </p>
                 </div>
               ))}
             </div>
@@ -719,8 +742,69 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
             </div>
           </section>
 
-          <section className="mt-16 max-w-4xl">
-            <AboutIntro />
+          <section id="contact" className="scroll-mt-8 mt-16 pb-4">
+            <div className="relative overflow-hidden border border-accent/35 bg-dark-card/85 p-6 lg:p-8 shadow-[0_0_40px_rgba(59,130,246,0.12)]">
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent" />
+              <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:items-center">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">
+                    Contact
+                  </p>
+                  <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4 tracking-tight">
+                    Let&apos;s build real systems.
+                  </h2>
+                  <p className="text-lg leading-8 text-gray-300">
+                    I&apos;m looking for embedded robotics, computer vision, and hardware-software
+                    integration opportunities.
+                  </p>
+
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {focusTiles.map((tile) => (
+                      <span
+                        key={`contact-${tile.title}`}
+                        className="border border-dark-border bg-dark-bg/70 px-3 py-1.5 text-xs font-semibold text-gray-300"
+                      >
+                        {tile.title}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="border border-dark-border bg-dark-bg/80 p-4 lg:p-5">
+                  <div className="mb-4 border-b border-dark-border pb-3">
+                    <p className="text-xs uppercase tracking-[0.2em] text-gray-500">Message</p>
+                    <p className="mt-2 text-sm text-gray-300">
+                      Have an embedded robotics, firmware, or computer vision opportunity?
+                    </p>
+                  </div>
+
+                  <a
+                    href={emailHref}
+                    className="group mb-3 inline-flex w-full items-center justify-center gap-2 bg-accent px-4 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent/85 hover:shadow-lg hover:shadow-accent/25 cursor-target"
+                  >
+                    <FaEnvelope className="w-4 h-4" />
+                    Email Me
+                  </a>
+
+                  <div className="grid grid-cols-3 gap-2">
+                    {contactLinks.map((link) => (
+                      <a
+                        key={link.label}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center justify-center gap-2 border border-dark-border bg-dark-card/80 px-3 py-2.5 text-sm font-semibold text-gray-300 transition-all duration-200 hover:border-accent hover:bg-accent/15 hover:text-white cursor-target"
+                      >
+                        <span className="text-gray-500 transition-colors duration-200 group-hover:text-accent">
+                          {link.icon}
+                        </span>
+                        <span className="hidden sm:inline">{link.label}</span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </section>
         </>
       )}
