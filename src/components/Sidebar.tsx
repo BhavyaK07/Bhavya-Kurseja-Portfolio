@@ -128,7 +128,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
 
 
           <button
-            onClick={() => window.open('https://drive.google.com/file/d/12_EKJfEjW6Z0IJVDUpoY6-5avS1odiMw/view?usp=sharing', '_blank')}
+            onClick={() => window.open('https://drive.google.com/file/d/19925RxXiuQlJGn8tRheifYnU2fNagPu3/view?usp=sharing', '_blank')}
             className="w-full border py-2.5 px-3 text-white transition-colors duration-200 cursor-target bg-dark-card border-dark-border hover:bg-accent/20 hover:border-accent"
           >
             <div className="flex items-center justify-center space-x-2">

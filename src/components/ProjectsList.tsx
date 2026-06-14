@@ -194,7 +194,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
     },
     {
       label: 'Resume',
-      href: 'https://drive.google.com/file/d/12_EKJfEjW6Z0IJVDUpoY6-5avS1odiMw/view?usp=sharing',
+      href: 'https://drive.google.com/file/d/19925RxXiuQlJGn8tRheifYnU2fNagPu3/view?usp=sharing',
       icon: <FaFileAlt className="w-4 h-4" />
     }
   ];
@@ -720,7 +720,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
                 University of Waterloo
               </h2>
               <p className="text-gray-300 mt-2">
-                Bachelor of Applied Science in Mechatronics Engineering (Co-op Program)
+                Bachelor of Applied Science in Honours Mechatronics Engineering (Co-op Program)
               </p>
               <p className="text-gray-400 text-sm mt-2">
                 Sept 2025 - Present | Waterloo, ON
