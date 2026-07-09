@@ -54,13 +54,6 @@ function App() {
         setCurrentSection('projects');
         window.location.hash = 'projects';
       }
-
-      // Resume shortcut: Ctrl+Shift+R (Windows) or Cmd+Shift+R (Mac)
-      if ((isMac && event.metaKey && event.shiftKey && event.key === 'r') || 
-          (!isMac && event.ctrlKey && event.shiftKey && event.key === 'r')) {
-        event.preventDefault();
-        window.open('https://drive.google.com/file/d/1ZFIeIdncx69nHE8jEKPviROorDF3z03T/view?usp=sharing', '_blank');
-      }
     };
 
     // Use capture phase to ensure the event is caught

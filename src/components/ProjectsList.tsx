@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FaEnvelope, FaFileAlt, FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa';
 import { SiDevpost } from 'react-icons/si';
 import { Project, projects } from '../data/projects';
 
@@ -191,11 +191,6 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
       label: 'GitHub',
       href: 'https://github.com/BhavyaK07',
       icon: <FaGithub className="w-4 h-4" />
-    },
-    {
-      label: 'Resume',
-      href: 'https://drive.google.com/file/d/19925RxXiuQlJGn8tRheifYnU2fNagPu3/view?usp=sharing',
-      icon: <FaFileAlt className="w-4 h-4" />
     }
   ];
 
@@ -786,14 +781,14 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
                     Email Me
                   </a>
 
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 gap-2">
                     {contactLinks.map((link) => (
                       <a
                         key={link.label}
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group inline-flex items-center justify-center gap-2 border border-dark-border bg-dark-card/80 px-3 py-2.5 text-sm font-semibold text-gray-300 transition-all duration-200 hover:border-accent hover:bg-accent/15 hover:text-white cursor-target"
+                        className="group inline-flex items-center justify-center gap-2 border border-dark-border bg-dark-card/80 px-4 py-3 text-sm font-semibold text-gray-300 transition-all duration-200 hover:border-accent hover:bg-accent/15 hover:text-white cursor-target"
                       >
                         <span className="text-gray-500 transition-colors duration-200 group-hover:text-accent">
                           {link.icon}
