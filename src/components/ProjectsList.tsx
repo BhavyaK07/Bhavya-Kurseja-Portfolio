@@ -1,34 +1,23 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
+import { FaEnvelope, FaGithub, FaLinkedin, FaTrophy } from 'react-icons/fa';
 import { SiDevpost } from 'react-icons/si';
 import { Project, projects } from '../data/projects';
-import { EMAIL } from '../data/profile';
+import { EMAIL, NEXT_COOP_TERM } from '../data/profile';
+import SystemDiagram from './SystemDiagram';
+import brickeyeLogo from '../assets/logos/brickeye.png';
+import watonomousLogo from '../assets/logos/watonomous.jpg';
+import virtekLogo from '../assets/logos/virtek.png';
+
+// The 3D viewer is only needed on project pages that have a model.
+const ModelViewer = lazy(() => import('./ModelViewer'));
 
 interface ProjectsListProps {
-  /** default = main page, all-projects = project grid, detail = one project's page */
+  /** default = main page, all-projects = full-width tile grid, detail = one project's full-width page */
   mode?: 'default' | 'all-projects' | 'detail';
   projectSlug?: string;
 }
 
-type ProjectMediaItem = {
-  type: 'image' | 'video';
-  src: string;
-};
-
-type ProjectMediaFit = 'cover' | 'contain' | 'natural';
-
 const projectHref = (project: Project) => `#project-${project.slug}`;
-
-const getProjectMedia = (project: Project): ProjectMediaItem[] => {
-  const imageSources = project.images && project.images.length > 0 ? project.images : [project.image];
-  const media: ProjectMediaItem[] = imageSources.map((src) => ({ type: 'image', src }));
-
-  if (project.videoUrl) {
-    media.push({ type: 'video', src: project.videoUrl });
-  }
-
-  return media;
-};
 
 const getGithubUrl = (project: Project): string | undefined => {
   return project.githubUrl ?? project.buttons?.find((button) => button.type === 'github')?.url;
@@ -114,42 +103,44 @@ const SectionHeading: React.FC<{ id?: string; as?: 'h1' | 'h2'; children: React.
 
 const experiences = [
   {
+    role: 'Product Hardware Engineer',
+    org: 'Brickeye',
+    logo: brickeyeLogo,
+    date: 'Sept 2026 - Dec 2026',
+    location: 'North York, ON',
+    focus: 'IoT Hardware / Firmware',
+    tags: ['SolidWorks', 'KiCAD', 'PCB Design', 'Firmware', 'LoRaWAN', 'ThingsBoard'],
+    bullets: [
+      'Developing and validating IoT sensor systems through mechanical prototyping, electrical schematics, PCB design, firmware development, and sensor characterization using SolidWorks and KiCAD.',
+      'Built a proof-of-concept sensor-monitoring system ingesting live telemetry from LoRaWAN sensors and gateways (ChirpStack to ThingsBoard) across 3 modeled buildings and 170 suites.'
+    ]
+  },
+  {
+    role: 'Humanoid Perception and Firmware Developer',
+    org: 'Watonomous',
+    logo: watonomousLogo,
+    date: 'Jan 2026 - Present',
+    location: 'Waterloo, ON',
+    focus: 'Robotics Perception / Firmware',
+    tags: ['ROS2', 'VSLAM', 'RTAB-Map', 'GTSAM', 'Isaac Sim', 'C/C++'],
+    bullets: [
+      'Built a wearable 6-DOF leader arm and developed firmware to read joint angles from STS3215 serial-bus servos over half-duplex UART, collecting data to train a humanoid in Isaac Sim.',
+      'Leading VSLAM development using RTAB-Map, an Intel RealSense D435i, and ROS2 for RGB-D localization and 3D mapping, and developing IMU fusion on a GTSAM factor-graph backend.',
+      'Developed embedded firmware on STM32 microcontrollers, implementing HAL-based USART communication in C/C++ for reliable inter-device data exchange and robotic subsystem coordination.'
+    ]
+  },
+  {
     role: 'Quality Assurance',
     org: 'Virtek Vision International',
+    logo: virtekLogo,
     date: 'Jan 2026 - Apr 2026',
     location: 'Waterloo, ON',
     focus: 'Hardware / Software QA',
-    tags: ['Laser Projectors', 'Camera Systems', 'Local AI Vision Models', 'Desktop App', 'Web App', 'Python', 'PowerShell'],
+    tags: ['Laser Projectors', 'AI Vision Systems', 'Python', 'PowerShell', 'JIRA', 'Bitbucket'],
     bullets: [
-      'Executed 1,200+ manual regression tests across laser projectors, camera systems running local AI vision models, desktop software, and web applications.',
-      'Verified 90+ software and hardware defects across two full validation cycles.',
-      'Built 30+ reusable Python and PowerShell automation scripts to convert manual QA workflows into repeatable internal test tools.'
-    ]
-  },
-  {
-    role: 'Humanoid Perception & Embedded Systems Team',
-    org: 'Watonomous',
-    date: 'Jan 2026 - Present',
-    location: 'Waterloo, ON',
-    focus: 'Robotics Perception / Embedded Systems',
-    tags: ['ROS2', 'VSLAM', 'Intel RealSense D435i', 'RGB-D', 'IMU', 'IR Sensors', 'STM32', 'C/C++', 'STM32 HAL', 'USART2'],
-    bullets: [
-      'Implementing VSLAM with an Intel RealSense D435i using ROS2, utilizing RGB-D and IMU data streams for localization and 3D map generation.',
-      'Integrating camera and IR sensor fusion pipelines to enhance obstacle detection, navigation accuracy, and robustness in complex environments.',
-      'Developed embedded firmware on STM32 microcontrollers, implementing HAL-based USART2 communication in C/C++ for reliable inter-device data exchange and robotic subsystem coordination.'
-    ]
-  },
-  {
-    role: 'Data Management Member',
-    org: 'Bluevale Electric Car Team',
-    date: 'Sept 2022 - June 2025',
-    location: 'Waterloo, ON',
-    focus: 'Vehicle Telemetry',
-    tags: ['Raspberry Pi', 'Python', 'PubNub', 'Telemetry', 'Multithreading', 'Electric Vehicle'],
-    bullets: [
-      'Engineered a Raspberry Pi telemetry system for a custom team-built electric car, improving communication efficiency 30x through better data handling, faster driver feedback, and tighter system integration.',
-      'Built a multi-threaded Python + PubNub telemetry architecture reaching 99% data accuracy across vehicle data including battery voltage, current draw, speed, race time, amp-hours consumed, discharge data, motor power, and E-stop power state.',
-      'Created a system architecture diagram to document how vehicle telemetry components worked together.'
+      'Executed 1,200+ regression tests across laser projectors, camera systems running local AI vision models, desktop software, and web applications over two full validation cycles.',
+      'Identified 90+ software and hardware defects in collaboration with developers using JIRA, Git, and Bitbucket.',
+      'Developed 30+ reusable Python and PowerShell QA automation scripts for regression and validation testing, reducing human error and saving an estimated 8-12 hours per regression cycle.'
     ]
   }
 ];
@@ -157,15 +148,19 @@ const experiences = [
 const skillGroups = [
   {
     title: 'Programming',
-    skills: ['C', 'C++', 'Python', 'PowerShell']
+    skills: ['C/C++', 'Python', 'JavaScript', 'PowerShell']
   },
   {
     title: 'Embedded & Hardware',
-    skills: ['STM32 HAL', 'Arduino', 'ESP32', 'Raspberry Pi', 'UART / Serial', 'Low-level Drivers']
+    skills: ['STM32 HAL', 'ESP32', 'Arduino', 'Raspberry Pi', 'UART / Serial', 'PCB Design', 'LoRaWAN']
   },
   {
-    title: 'Software & Tools',
-    skills: ['Git', 'ROS2', 'OpenCV', 'Firebase', 'React', 'SolidWorks', 'AutoCAD']
+    title: 'Robotics & Vision',
+    skills: ['ROS2', 'RTAB-Map', 'GTSAM', 'Isaac Sim', 'Foxglove', 'OpenCV', 'MediaPipe', 'YOLOv8', 'PyTorch']
+  },
+  {
+    title: 'CAD & Tools',
+    skills: ['SolidWorks', 'KiCAD', 'AutoCAD', 'Git', 'Docker', 'JIRA']
   },
   {
     title: 'Manufacturing',
@@ -197,10 +192,10 @@ const skillHoverColorByName = new Map(
 );
 
 const focusTiles = [
-  { title: 'Embedded Robotics', detail: 'Physical systems, sensors, and control' },
-  { title: 'Computer Vision', detail: 'AI models connected to real hardware' },
-  { title: 'Firmware + Control', detail: 'C/C++, serial comms, and device logic' },
-  { title: 'Hardware Integration', detail: 'Mechanical, electrical, and software builds' }
+  { title: 'Perception & SLAM', detail: 'RTAB-Map VSLAM, RealSense D435i, GTSAM IMU fusion' },
+  { title: 'Computer Vision', detail: 'PyTorch CNNs, OpenCV, YOLOv8, MediaPipe' },
+  { title: 'Robot Integration', detail: '5-DOF arm, 6-DOF leader arm, Isaac Sim' },
+  { title: 'Embedded Firmware', detail: 'STM32 HAL, half-duplex UART servo bus, ESP32' }
 ];
 
 const contactLinks = [
@@ -219,63 +214,68 @@ const contactLinks = [
 const emailHref = `mailto:${EMAIL}?subject=Embedded%20Robotics%20%2F%20Computer%20Vision%20Opportunity&body=Hi%20Bhavya%2C%0A%0AI%20came%20across%20your%20portfolio%20and%20wanted%20to%20reach%20out%20about...`;
 
 const featuredProjects = projects.filter((project) => project.featured !== false);
+const cardId = (project: Project) => `project-card-${project.slug}`;
+
+// Remembers the last project page opened, so going back to All Projects lands on that tile.
+let lastViewedProjectSlug: string | null = null;
+
+/** Project image framed per its type: photos fill the frame, logos sit on their own background. */
+const ProjectImage: React.FC<{ project: Project; src?: string; lazy?: boolean; className?: string }> = ({
+  project,
+  src = project.image,
+  lazy = false,
+  className = ''
+}) => {
+  const contain = project.imageFit === 'contain';
+  return (
+    <div
+      className={`flex items-center justify-center overflow-hidden ${contain ? 'p-6' : ''} ${className}`}
+      style={{ backgroundColor: contain ? project.imageBg ?? '#0a0a0a' : '#0a0a0a' }}
+    >
+      <img
+        src={src}
+        alt={project.title}
+        loading={lazy ? 'lazy' : undefined}
+        decoding="async"
+        className={contain ? 'max-h-full max-w-full object-contain' : 'h-full w-full object-cover'}
+      />
+    </div>
+  );
+};
 
 const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSlug }) => {
-  const [featuredIndex, setFeaturedIndex] = useState(0);
-  const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
-  const [isCarouselPaused, setIsCarouselPaused] = useState(false);
-  const [isSlideVisible, setIsSlideVisible] = useState(true);
-  const [isCarouselInView, setIsCarouselInView] = useState(false);
-  const carouselRef = useRef<HTMLDivElement>(null);
-
-  // Auto-advancing changes the carousel height, which shifts everything below it.
-  // Only autoplay on hover-capable devices (so hover can pause it), when the user
-  // hasn't asked for reduced motion, and only while the carousel is on screen.
-  const canAutoplay = useMemo(
-    () => window.matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches,
-    []
-  );
+  const [mediaTab, setMediaTab] = useState<number | 'model'>(0);
 
   const selectedProject = projects.find((project) => project.slug === projectSlug) ?? null;
-  const featuredProject = featuredProjects[featuredIndex] ?? featuredProjects[0];
 
-  // Separate pages (all projects / a project) start at the top. The browser can't
-  // do this itself because the hash target doesn't exist until after render.
+  // Full-width pages start at the top (the browser can't do this itself because the
+  // hash target doesn't exist until after render). Returning to All Projects from a
+  // project lands on that project's tile instead.
   useEffect(() => {
-    setSelectedMediaIndex(0);
-    if (mode !== 'default') window.scrollTo(0, 0);
+    setMediaTab(0);
+    if (mode === 'detail') {
+      window.scrollTo(0, 0);
+      lastViewedProjectSlug = projectSlug ?? null;
+    } else if (mode === 'all-projects') {
+      const returnTile = lastViewedProjectSlug ? document.getElementById(`project-card-${lastViewedProjectSlug}`) : null;
+      lastViewedProjectSlug = null;
+      if (returnTile) {
+        returnTile.scrollIntoView({ block: 'center' });
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }
   }, [mode, projectSlug]);
-
-  useEffect(() => {
-    setIsSlideVisible(false);
-    const frameId = window.requestAnimationFrame(() => setIsSlideVisible(true));
-    return () => window.cancelAnimationFrame(frameId);
-  }, [featuredIndex]);
-
-  useEffect(() => {
-    const node = carouselRef.current;
-    if (!node || !('IntersectionObserver' in window)) return;
-    const observer = new IntersectionObserver(([entry]) => setIsCarouselInView(entry.isIntersecting));
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [mode]);
-
-  useEffect(() => {
-    if (mode !== 'default' || isCarouselPaused || !canAutoplay || !isCarouselInView) return;
-    if (featuredProjects.length <= 1) return;
-
-    const intervalId = window.setInterval(() => {
-      setFeaturedIndex((prev) => (prev + 1) % featuredProjects.length);
-    }, 5000);
-
-    return () => window.clearInterval(intervalId);
-  }, [canAutoplay, isCarouselInView, isCarouselPaused, mode]);
 
   useEffect(() => {
     if (mode !== 'default') return;
 
     const scrollToCurrentHash = () => {
       const hash = window.location.hash.replace('#', '');
+      if (hash === 'top') {
+        window.scrollTo(0, 0);
+        return;
+      }
       if (!['projects', 'experience', 'skills'].includes(hash)) return;
 
       window.requestAnimationFrame(() => {
@@ -288,184 +288,117 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
     return () => window.removeEventListener('hashchange', scrollToCurrentHash);
   }, [mode]);
 
-  const renderMediaByIndex = (
-    project: Project,
-    mediaIndex: number,
-    withControls = true,
-    fit: ProjectMediaFit = 'cover',
-    lazy = false
-  ) => {
-    const mediaItems = getProjectMedia(project);
-    const mediaItem = mediaItems[mediaIndex] ?? mediaItems[0];
-
-    if (!mediaItem) return null;
-
-    const mediaClassName =
-      fit === 'cover'
-        ? 'w-full h-full object-cover'
-        : fit === 'contain'
-          ? 'w-full h-full object-contain'
-          : 'max-w-full h-auto max-h-[520px] object-contain mx-auto';
-
-    if (mediaItem.type === 'video') {
-      return (
-        <video
-          src={mediaItem.src}
-          controls={withControls}
-          muted={!withControls}
-          playsInline
-          className={`${mediaClassName} bg-black`}
-        />
-      );
-    }
-
-    return (
-      <img
-        src={mediaItem.src}
-        alt={project.title}
-        loading={lazy ? 'lazy' : undefined}
-        decoding="async"
-        className={mediaClassName}
-      />
-    );
-  };
-
   const renderFeaturedProjects = () => (
-    <div className="mt-8">
-      <div
-        ref={carouselRef}
-        className="bg-dark-card/70 backdrop-blur-sm border border-dark-border rounded-2xl overflow-hidden"
-        onMouseEnter={() => setIsCarouselPaused(true)}
-        onMouseLeave={() => setIsCarouselPaused(false)}
-      >
-        <div
-          className={`grid grid-cols-1 lg:grid-cols-2 transition-all duration-500 ease-out ${
-            isSlideVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-          }`}
-          key={featuredProject.id}
+    <div className="mt-8 space-y-6">
+      {featuredProjects.map((project, index) => (
+        <article
+          key={project.id}
+          className="group bg-dark-card/70 backdrop-blur-sm border border-dark-border hover:border-accent/50 transition-colors duration-300 overflow-hidden"
         >
-          <a
-            href={projectHref(featuredProject)}
-            className="relative aspect-[4/3] lg:aspect-auto lg:h-full min-h-[280px] bg-dark-bg flex items-center justify-center overflow-hidden p-4 cursor-target"
-          >
-            {renderMediaByIndex(featuredProject, 0, false, 'contain')}
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4 flex items-center justify-between">
-              <p className="text-sm text-gray-200">
-                Featured Project {featuredIndex + 1} / {featuredProjects.length}
-              </p>
-              {featuredProject.videoUrl && (
-                <span className="text-xs uppercase tracking-[0.2em] text-accent">Video</span>
-              )}
-            </div>
-          </a>
-
-          <div className="p-6 lg:p-8 flex flex-col justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">
-                Featured
-              </p>
-              <h3 className="text-2xl font-bold text-white mb-4">{featuredProject.title}</h3>
-              <p className="text-gray-300 leading-relaxed mb-5">{featuredProject.description}</p>
-
-              {featuredProject.highlights && featuredProject.highlights.length > 0 && (
-                <BulletList items={featuredProject.highlights.slice(0, 3)} className="space-y-2 mb-6" />
-              )}
-
-              <TagList tags={featuredProject.technologies} />
-            </div>
-
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a
-                href={projectHref(featuredProject)}
-                className="bg-accent hover:bg-accent/80 text-white font-semibold py-2 px-4 transition-colors duration-200 cursor-target"
-              >
-                View Project Details
-              </a>
-              <ProjectExternalLinks project={featuredProject} />
-            </div>
-          </div>
-        </div>
-
-        <div className="border-t border-dark-border p-4 flex items-center justify-between">
-          <button
-            onClick={() => setFeaturedIndex((prev) => (prev - 1 + featuredProjects.length) % featuredProjects.length)}
-            className="bg-dark-bg border border-dark-border hover:border-accent text-gray-200 py-2 px-3 transition-colors duration-200 cursor-target"
-          >
-            Prev
-          </button>
-          <div className="flex items-center gap-2">
-            {featuredProjects.map((project, index) => (
-              <button
-                key={project.id}
-                onClick={() => setFeaturedIndex(index)}
-                className={`h-2.5 w-8 transition-colors duration-200 ${
-                  index === featuredIndex ? 'bg-accent' : 'bg-dark-border hover:bg-gray-500'
-                }`}
-                aria-label={`Go to featured project ${index + 1}`}
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+            <a
+              href={projectHref(project)}
+              tabIndex={-1}
+              aria-hidden="true"
+              className={`block cursor-target ${index % 2 === 1 ? 'lg:order-2' : ''}`}
+            >
+              <ProjectImage
+                project={project}
+                lazy={index > 0}
+                className="aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[340px] transition-transform duration-500 group-hover:scale-[1.02]"
               />
-            ))}
-          </div>
-          <button
-            onClick={() => setFeaturedIndex((prev) => (prev + 1) % featuredProjects.length)}
-            className="bg-dark-bg border border-dark-border hover:border-accent text-gray-200 py-2 px-3 transition-colors duration-200 cursor-target"
-          >
-            Next
-          </button>
-        </div>
-      </div>
+            </a>
 
-      <div className="mt-4 flex justify-end">
+            <div className="p-6 lg:p-8 flex flex-col">
+              {project.award && (
+                <p className="mb-3 inline-flex w-fit items-center gap-2 border border-amber-500/40 bg-amber-500/10 px-2.5 py-1 text-xs font-semibold text-amber-200">
+                  <FaTrophy className="h-3 w-3 text-amber-400" aria-hidden="true" />
+                  {project.award}
+                </p>
+              )}
+              <a href={projectHref(project)} className="cursor-target">
+                <h3 className="text-2xl font-bold text-white mb-3 hover:text-accent transition-colors duration-200">
+                  {project.title}
+                </h3>
+              </a>
+              <p className="text-gray-300 leading-relaxed mb-5">{project.description}</p>
+
+              {project.highlights && project.highlights.length > 0 && (
+                <BulletList
+                  items={project.highlights.filter((highlight) => !highlight.startsWith('Awarded')).slice(0, 2)}
+                  className="space-y-2 mb-6"
+                />
+              )}
+
+              <TagList tags={project.technologies.slice(0, 6)} />
+
+              <div className="mt-auto pt-6 flex flex-wrap items-center gap-3">
+                <a
+                  href={projectHref(project)}
+                  className="inline-flex items-center gap-2 bg-accent hover:bg-accent/80 text-white font-semibold py-2 px-4 transition-colors duration-200 cursor-target"
+                >
+                  How it works
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
+                <ProjectExternalLinks project={project} />
+              </div>
+            </div>
+          </div>
+        </article>
+      ))}
+
+      <div className="flex justify-end">
         <a
           href="#all-projects"
-          className="group relative overflow-hidden bg-gradient-to-r from-accent via-blue-500 to-indigo-500 text-white font-semibold py-2.5 px-5 transition-all duration-300 cursor-target shadow-[0_0_0_1px_rgba(255,255,255,0.12),0_0_24px_rgba(59,130,246,0.35)] hover:shadow-[0_0_0_1px_rgba(255,255,255,0.25),0_0_34px_rgba(59,130,246,0.55)] hover:-translate-y-0.5"
+          className="group/all inline-flex items-center gap-2 border border-accent/60 bg-accent/10 text-white font-semibold py-2.5 px-5 transition-colors duration-200 hover:bg-accent/20 hover:border-accent cursor-target"
         >
-          <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-white/10 via-transparent to-white/10" />
-          <span className="relative z-10 inline-flex items-center gap-2">
-            View All {projects.length} Projects
-            <svg
-              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </span>
+          View All {projects.length} Projects
+          <svg
+            className="w-4 h-4 transition-transform duration-300 group-hover/all:translate-x-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
         </a>
       </div>
     </div>
   );
 
   const renderProjectTiles = () => (
-    <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="mt-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
       {projects.map((project) => (
         <div
           key={project.id}
-          className="text-left bg-dark-card/70 backdrop-blur-sm border border-dark-border rounded-2xl overflow-hidden hover:border-accent/50 transition-colors duration-200"
+          id={cardId(project)}
+          className="group flex flex-col bg-dark-card/70 backdrop-blur-sm border border-dark-border overflow-hidden hover:border-accent/50 transition-colors duration-200"
         >
-          <a href={projectHref(project)} className="block cursor-target" tabIndex={-1} aria-hidden="true">
-            <div className="aspect-[4/3] bg-dark-bg flex items-center justify-center p-4 overflow-hidden">
-              {renderMediaByIndex(project, 0, false, 'contain', true)}
-            </div>
+          <a href={projectHref(project)} className="block cursor-target overflow-hidden" tabIndex={-1} aria-hidden="true">
+            <ProjectImage
+              project={project}
+              lazy
+              className="aspect-[16/10] transition-transform duration-500 group-hover:scale-[1.02]"
+            />
           </a>
-          <div className="p-5">
+          <div className="p-5 flex flex-1 flex-col">
+            {project.award && (
+              <p className="mb-2 inline-flex w-fit items-center gap-1.5 text-xs font-semibold text-amber-300">
+                <FaTrophy className="h-3 w-3" aria-hidden="true" />
+                {project.award}
+              </p>
+            )}
             <a href={projectHref(project)} className="block cursor-target">
               <h3 className="text-lg font-bold text-white mb-3 hover:text-accent transition-colors duration-200">
                 {project.title}
               </h3>
             </a>
             <p className="text-sm leading-relaxed text-gray-400 mb-4">{project.description}</p>
-            <div className="flex flex-wrap gap-2">
-              {project.technologies.map((tech) => (
-                <span
-                  key={`${project.id}-${tech}`}
-                  className="bg-dark-bg border border-dark-border text-gray-300 px-2 py-1 text-xs font-mono rounded-full"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-            <ProjectExternalLinks project={project} className="mt-5" />
+            <TagList tags={project.technologies.slice(0, 5)} />
+            <ProjectExternalLinks project={project} className="mt-auto pt-5" />
           </div>
         </div>
       ))}
@@ -473,54 +406,89 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
   );
 
   const renderProjectDetail = (project: Project) => {
-    const media = getProjectMedia(project);
+    const images = project.images && project.images.length > 0 ? project.images : [project.image];
+    const tabs: { key: number | 'model'; label: string }[] = [
+      ...images.map((_, index) => ({ key: index, label: images.length > 1 ? `Photo ${index + 1}` : 'Photo' })),
+      ...(project.videoUrl ? [{ key: images.length, label: 'Video' }] : []),
+      ...(project.model ? [{ key: 'model' as const, label: '3D Model' }] : [])
+    ];
+    const isVideo = project.videoUrl && mediaTab === images.length;
+
+    const position = projects.findIndex((p) => p.slug === project.slug);
+    const previous = projects[(position - 1 + projects.length) % projects.length];
+    const next = projects[(position + 1) % projects.length];
 
     return (
       <>
-        <a
-          href="#all-projects"
-          className="inline-flex items-center gap-1 text-sm text-accent hover:text-accent/80 transition-colors duration-200 cursor-target"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          All Projects
-        </a>
-
-        <article className="mt-4 bg-dark-card/70 backdrop-blur-sm border border-dark-border rounded-2xl overflow-hidden">
-          <div className="min-h-64 lg:min-h-[420px] bg-dark-bg flex items-center justify-center p-4 overflow-hidden">
-            {renderMediaByIndex(project, selectedMediaIndex, true, 'natural')}
+        <article className="bg-dark-card/70 backdrop-blur-sm border border-dark-border overflow-hidden">
+          <div className="bg-dark-bg">
+            {mediaTab === 'model' && project.model ? (
+              <Suspense fallback={<div className="h-72 lg:h-[420px]" />}>
+                <ModelViewer
+                  url={project.model.url}
+                  format={project.model.format}
+                  color={project.model.color}
+                  caption={project.model.caption}
+                  title={project.title}
+                />
+              </Suspense>
+            ) : isVideo ? (
+              <video src={project.videoUrl} controls playsInline className="w-full max-h-[520px] bg-black" />
+            ) : (
+              <ProjectImage
+                project={project}
+                src={images[typeof mediaTab === 'number' ? mediaTab : 0] ?? project.image}
+                className="h-72 lg:h-[420px]"
+              />
+            )}
           </div>
 
-          {media.length > 1 && (
-            <div className="px-6 pt-4 flex flex-wrap gap-2">
-              {media.map((item, index) => (
+          {tabs.length > 1 && (
+            <div className="px-6 pt-4 flex flex-wrap gap-2" role="tablist" aria-label="Project media">
+              {tabs.map((tab) => (
                 <button
-                  key={`${project.id}-${item.src}-${index}`}
-                  onClick={() => setSelectedMediaIndex(index)}
+                  key={String(tab.key)}
+                  role="tab"
+                  aria-selected={mediaTab === tab.key}
+                  onClick={() => setMediaTab(tab.key)}
                   className={`text-xs uppercase tracking-wide px-3 py-1 border transition-colors duration-200 cursor-target ${
-                    selectedMediaIndex === index
+                    mediaTab === tab.key
                       ? 'border-accent text-accent bg-accent/10'
-                      : 'border-dark-border text-gray-300 bg-dark-bg'
+                      : 'border-dark-border text-gray-300 bg-dark-bg hover:border-accent/60'
                   }`}
                 >
-                  {item.type === 'video' ? `Video ${index + 1}` : `Image ${index + 1}`}
+                  {tab.label}
                 </button>
               ))}
             </div>
           )}
 
           <div className="p-6 lg:p-8">
+            {project.award && (
+              <p className="mb-3 inline-flex items-center gap-2 border border-amber-500/40 bg-amber-500/10 px-2.5 py-1 text-xs font-semibold text-amber-200">
+                <FaTrophy className="h-3 w-3 text-amber-400" aria-hidden="true" />
+                {project.award}
+              </p>
+            )}
             <h1 className="text-2xl lg:text-3xl font-bold text-white mb-4">{project.title}</h1>
-            <div className="mb-6">
+            <div className="mb-8">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">Overview</p>
               <p className="text-gray-300 text-base leading-relaxed">{project.description}</p>
             </div>
 
+            {project.pipeline && project.pipeline.length > 0 && (
+              <div className="mb-8">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">How It Works</p>
+                <SystemDiagram steps={project.pipeline} />
+              </div>
+            )}
+
             {project.highlights && project.highlights.length > 0 && (
-              <div className="mb-6">
+              <div className="mb-8">
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">What I Built</p>
-                <BulletList items={project.highlights} />
+                <BulletList
+                  items={project.award ? project.highlights.filter((h) => !h.startsWith('Awarded')) : project.highlights}
+                />
               </div>
             )}
 
@@ -532,18 +500,58 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
             <ProjectExternalLinks project={project} />
           </div>
         </article>
+
+        {/* Browse between projects without going back to the list */}
+        <nav className="mt-6 grid grid-cols-2 gap-4" aria-label="More projects">
+          {[
+            { label: 'Previous', project: previous, align: 'text-left', arrow: 'M15 19l-7-7 7-7' },
+            { label: 'Next', project: next, align: 'text-right', arrow: 'M9 5l7 7-7 7' }
+          ].map((item) => (
+            <a
+              key={item.label}
+              href={projectHref(item.project)}
+              className={`group border border-dark-border bg-dark-card/70 backdrop-blur-sm p-4 lg:p-5 hover:border-accent/60 transition-colors duration-200 cursor-target ${item.align}`}
+            >
+              <span className={`flex items-center gap-1 text-xs uppercase tracking-[0.2em] text-accent ${item.label === 'Next' ? 'justify-end' : ''}`}>
+                {item.label === 'Previous' && (
+                  <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.arrow} />
+                  </svg>
+                )}
+                {item.label} project
+                {item.label === 'Next' && (
+                  <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.arrow} />
+                  </svg>
+                )}
+              </span>
+              <span className="mt-1 block text-sm lg:text-base font-semibold text-white group-hover:text-accent transition-colors duration-200">
+                {item.project.title.split(' - ')[0]}
+              </span>
+            </a>
+          ))}
+        </nav>
       </>
     );
   };
 
   if (mode === 'detail' && selectedProject) {
-    return <div className="p-4 lg:p-8 pt-16 lg:pt-8 mt-16">{renderProjectDetail(selectedProject)}</div>;
+    return <div className="mx-auto max-w-6xl px-4 lg:px-8 py-8 lg:py-12">{renderProjectDetail(selectedProject)}</div>;
   }
 
   if (mode === 'all-projects') {
     return (
-      <div className="p-4 lg:p-8 pt-16 lg:pt-8 mt-16">
-        <SectionHeading id="all-projects" as="h1" className="mb-4">ALL PROJECTS</SectionHeading>
+      <div className="mx-auto max-w-6xl px-4 lg:px-8 py-8 lg:py-12">
+        <a
+          href="#projects"
+          className="inline-flex items-center gap-1 text-sm text-accent hover:text-accent/80 transition-colors duration-200 cursor-target"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to home
+        </a>
+        <SectionHeading id="all-projects" as="h1" className="mt-4">ALL PROJECTS</SectionHeading>
         {renderProjectTiles()}
       </div>
     );
@@ -554,11 +562,17 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
       <section className="mb-12 max-w-4xl">
         <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent mb-3">Bhavya Kurseja</p>
         <h1 className="text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight">
-          Mechatronics student building robotics and embedded systems.
+          Mechatronics student building robot perception and embedded systems.
         </h1>
         <p className="text-lg leading-8 text-gray-300 max-w-3xl">
           I build across firmware, hardware, and software, with projects focused on real devices,
           controls, sensing, and practical hardware-software integration.
+        </p>
+
+        {/* Phones have no sidebar, so show availability here. */}
+        <p className="lg:hidden mt-5 inline-flex items-center gap-2 border border-dark-border bg-dark-card/80 px-3 py-1.5 text-sm text-gray-200">
+          <span className="h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true" />
+          {NEXT_COOP_TERM ? `Open to ${NEXT_COOP_TERM} co-op` : 'Open to co-op opportunities'}
         </p>
 
         <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -578,7 +592,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
         </div>
       </section>
 
-      <SectionHeading id="projects" className="mb-10">FEATURED PROJECTS</SectionHeading>
+      <SectionHeading id="projects" className="mb-2">FEATURED PROJECTS</SectionHeading>
       {renderFeaturedProjects()}
 
       <SectionHeading id="experience" className="mt-16">EXPERIENCE</SectionHeading>
@@ -594,12 +608,21 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
 
               <div className="bg-dark-card/75 backdrop-blur-sm border border-dark-border p-5 lg:p-6 transition-colors duration-200 hover:border-accent/50">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-4">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-accent mb-2">
-                      {experience.focus}
-                    </p>
-                    <h3 className="text-lg lg:text-xl font-bold text-white">{experience.role}</h3>
-                    <p className="text-gray-300">{experience.org}</p>
+                  <div className="flex items-start gap-4">
+                    <img
+                      src={experience.logo}
+                      alt={`${experience.org} logo`}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-12 w-12 lg:h-14 lg:w-14 shrink-0 object-contain bg-white"
+                    />
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-accent mb-2">
+                        {experience.focus}
+                      </p>
+                      <h3 className="text-lg lg:text-xl font-bold text-white">{experience.role}</h3>
+                      <p className="text-gray-300">{experience.org}</p>
+                    </div>
                   </div>
                   <div className="lg:text-right">
                     <p className="text-sm font-medium text-gray-300">{experience.date}</p>
@@ -618,8 +641,13 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
       <SectionHeading id="skills" className="mt-16">SKILLS</SectionHeading>
 
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        {skillGroups.map((group) => (
-          <div key={group.title} className="bg-dark-card/70 backdrop-blur-sm border border-dark-border p-5">
+        {skillGroups.map((group, index) => (
+          <div
+            key={group.title}
+            className={`bg-dark-card/70 backdrop-blur-sm border border-dark-border p-5 ${
+              skillGroups.length % 2 === 1 && index === skillGroups.length - 1 ? 'md:col-span-2' : ''
+            }`}
+          >
             <h3 className="text-sm font-semibold text-accent mb-3 uppercase tracking-wide">{group.title}</h3>
             <div className="flex flex-wrap gap-2">
               {group.skills.map((skill) => {

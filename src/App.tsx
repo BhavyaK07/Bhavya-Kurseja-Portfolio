@@ -2,8 +2,8 @@ import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { Analytics } from "@vercel/analytics/react";
 import Sidebar from './components/Sidebar';
 import ProjectsList from './components/ProjectsList';
-import About from './components/About';
 import MobileMenu from './components/MobileMenu';
+import TopBar from './components/TopBar';
 import { projects } from './data/projects';
 
 // three.js is most of the bundle; load the background separately so text paints first.
@@ -11,7 +11,7 @@ const Dither = lazy(() => import('./components/Dither'));
 
 type Route = { section: string; projectSlug?: string };
 
-const SECTIONS = ['projects', 'all-projects', 'about', 'experience', 'skills'];
+const SECTIONS = ['projects', 'all-projects', 'experience', 'skills'];
 
 const parseHash = (): Route => {
   const hash = window.location.hash.replace('#', '');
@@ -27,6 +27,43 @@ const parseHash = (): Route => {
   return { section: SECTIONS.includes(hash) ? hash : 'projects' };
 };
 
+const HOME_SECTIONS = ['projects', 'experience', 'skills'];
+
+/** On the main page, highlight whichever section the reader has scrolled to. */
+function useScrollSpy(enabled: boolean, fallback: string) {
+  const [active, setActive] = useState(fallback);
+
+  useEffect(() => {
+    if (!enabled) return;
+
+    let frameId = 0;
+    const update = () => {
+      frameId = 0;
+      const line = window.innerHeight * 0.4;
+      let current = HOME_SECTIONS[0];
+      for (const id of HOME_SECTIONS) {
+        const element = document.getElementById(id);
+        if (element && element.getBoundingClientRect().top <= line) current = id;
+      }
+      setActive(current);
+    };
+    const onScroll = () => {
+      if (!frameId) frameId = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [enabled]);
+
+  return enabled ? active : fallback;
+}
+
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [route, setRoute] = useState<Route>(parseHash);
@@ -38,6 +75,9 @@ function App() {
   }, []);
 
   const { section, projectSlug } = route;
+  const navSection = useScrollSpy(HOME_SECTIONS.includes(section), section);
+  // All Projects and each project page are full width, without the sidebar.
+  const isFullWidthPage = section === 'project' || section === 'all-projects';
 
   return (
     <div className="min-h-screen bg-dark-bg relative">
@@ -59,38 +99,42 @@ function App() {
 
       <Analytics />
       <div className="relative z-10">
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setIsMobileMenuOpen(true)}
-          aria-label="Open menu"
-          className="fixed top-4 left-4 z-40 lg:hidden bg-dark-card border border-dark-border rounded-lg p-2 text-white hover:bg-dark-border transition-colors duration-200 cursor-target"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+        {isFullWidthPage ? (
+          <>
+            <TopBar current={section === 'project' ? 'project' : 'all-projects'} />
+            <main>
+              <ProjectsList mode={section === 'project' ? 'detail' : 'all-projects'} projectSlug={projectSlug} />
+            </main>
+          </>
+        ) : (
+          <>
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Open menu"
+              className="fixed top-4 left-4 z-40 lg:hidden bg-dark-card border border-dark-border rounded-lg p-2 text-white hover:bg-dark-border transition-colors duration-200 cursor-target"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <MobileMenu onClose={() => setIsMobileMenuOpen(false)} currentSection={section} />
+            {/* Mobile Menu */}
+            {isMobileMenuOpen && (
+              <MobileMenu onClose={() => setIsMobileMenuOpen(false)} currentSection={navSection} />
+            )}
+
+            {/* Desktop Sidebar */}
+            <div className="hidden lg:block">
+              <Sidebar currentSection={navSection} />
+            </div>
+
+            {/* Main Content */}
+            <main className="lg:ml-[300px]">
+              <ProjectsList mode="default" />
+            </main>
+          </>
         )}
-
-        {/* Desktop Sidebar */}
-        <div className="hidden lg:block">
-          <Sidebar currentSection={section} />
-        </div>
-
-        {/* Main Content */}
-        <main className="lg:ml-[300px]">
-          {section === 'about' ? (
-            <About />
-          ) : (
-            <ProjectsList
-              mode={section === 'project' ? 'detail' : section === 'all-projects' ? 'all-projects' : 'default'}
-              projectSlug={projectSlug}
-            />
-          )}
-        </main>
       </div>
     </div>
   );

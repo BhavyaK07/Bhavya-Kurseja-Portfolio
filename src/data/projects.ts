@@ -14,6 +14,19 @@ export interface Project {
   highlights?: string[];
   image: string;
   images?: string[];
+  /** 'cover' fills the frame (photos); 'contain' shows the whole image on imageBg (logos). Default: cover. */
+  imageFit?: 'cover' | 'contain';
+  imageBg?: string;
+  /** Short award line shown as a badge, e.g. on featured cards. */
+  award?: string;
+  /** Steps for the "How It Works" system diagram on the project page. */
+  pipeline?: { label: string; detail?: string }[];
+  /**
+   * Optional 3D model shown in a "3D Model" tab on the project page.
+   * Put the file in public/models/ (STL from SolidWorks: File > Save As > STL, or GLB).
+   * Keep it under ~5 MB.
+   */
+  model?: { url: string; format: 'stl' | 'glb'; color?: string; caption?: string };
   videoUrl?: string;
   technologies: string[];
   buttons?: {
@@ -41,9 +54,18 @@ export const projects: Project[] = [
       "Awarded 1st place in the Safety category at the Toyota Innovation Challenge.",
       "Built an onboard voice assistant that activates on a custom wake word and transcribes worker speech using Whisper STT to flag defect keywords.",
       "Triggered an onboard camera to scan part QR codes and instantly update a live Flask database over WiFi.",
-      "Integrated a voice-activated robotic arm that autonomously removes flagged parts from the assembly line in under 3 seconds, eliminating manual handling and logging every defect with full traceability."
+      "Integrated a 5-DOF robotic arm that autonomously removes flagged parts from the assembly line in under 3 seconds, eliminating manual handling and logging every defect with full traceability."
     ],
     image: taqaVisionImage,
+    award: '1st Place, Safety - Toyota Innovation Challenge',
+    pipeline: [
+      { label: 'Wake word', detail: 'OpenWakeWord' },
+      { label: 'Speech to text', detail: 'Whisper STT' },
+      { label: 'Defect keyword flagged' },
+      { label: 'QR scan of part', detail: 'Onboard camera' },
+      { label: 'Database updated', detail: 'Flask over WiFi' },
+      { label: 'Part removed', detail: '5-DOF arm, < 3 s' }
+    ],
     technologies: ['Python', 'Raspberry Pi', 'Flask', 'OpenWakeWord', 'Whisper'],
     githubUrl: 'https://github.com/BhavyaK07/toyota-innovation-challenge',
     buttonText: "View Project"
@@ -52,13 +74,21 @@ export const projects: Project[] = [
     id: 2,
     slug: 'autonimake',
     title: "AutoniMake - Code-Free AI Robotics Platform",
-    description: "Built a robotics prototyping platform that lets users connect computer vision model outputs to real hardware actions through a web interface.",
+    description: "Built a code-free AI robotics platform that lets users connect computer vision model outputs to real hardware actions through a web interface.",
     highlights: [
-      "Developed a real-time OpenCV pipeline using a custom PyTorch CNN model that reached 99% accuracy.",
-      "Designed a modular Raspberry Pi + ESP32 architecture for AI-triggered control of motors, sensors, and displays.",
+      "Trained custom PyTorch CNNs for gesture and object recognition from just 30 seconds of video per class (~900 frames), reaching ~99% accuracy in live OpenCV camera inference mapped to hardware actions.",
+      "Designed a modular hub-and-peripheral architecture using Raspberry Pi and ESP32, enabling AI-triggered control of motors, sensors, and robotic systems over serial communication.",
       "Implemented low-latency command mapping from model output to robotic actions for rapid prototyping."
     ],
     image: autoniMakeImage,
+    pipeline: [
+      { label: 'Camera feed', detail: 'OpenCV' },
+      { label: 'Custom CNN', detail: 'PyTorch' },
+      { label: 'Output mapped to action', detail: 'Web interface' },
+      { label: 'Hub', detail: 'Raspberry Pi' },
+      { label: 'Peripherals', detail: 'ESP32 over serial' },
+      { label: 'Motors, sensors, displays' }
+    ],
     technologies: ['Python', 'OpenCV', 'PyTorch', 'ESP32', 'Raspberry Pi'],
     githubUrl: 'https://github.com/BhavyaK07/Autonimake',
     devpostUrl: 'https://devpost.com/software/autonimake',
@@ -68,6 +98,7 @@ export const projects: Project[] = [
     id: 3,
     slug: 'pillbot',
     title: "PillBot - Autonomous Medicine Delivery Robot",
+    featured: false,
     description: "Engineered an autonomous medicine dispensing robot that lets a user choose pill quantity and destination room, then follows a matching color-coded route to deliver medication.",
     highlights: [
       "Integrated a touch LED sensor, color/optical sensor, distance sensor, inertial sensor, funnel, and conveyor belt into the delivery workflow.",
@@ -77,6 +108,21 @@ export const projects: Project[] = [
       "Used distance sensing to dispense the selected number of pills from the conveyor belt reliably at the destination."
     ],
     image: pillBotImage,
+    // PLACEHOLDER: demo shape so the 3D viewer can be previewed. Replace with the real CAD export
+    // (or delete this line) before merging to main.
+    model: {
+      url: '/models/placeholder-robot.stl',
+      format: 'stl',
+      caption: 'Placeholder model - real CAD coming soon'
+    },
+    pipeline: [
+      { label: 'Room + pill count chosen', detail: 'Remote control' },
+      { label: 'Departure confirmed', detail: 'Touch LED' },
+      { label: 'Color-line following', detail: 'Sway correction' },
+      { label: 'Arrives at room', detail: 'Distance sensor' },
+      { label: 'Pills dispensed', detail: 'Conveyor belt' },
+      { label: 'Return confirmed', detail: 'Touch LED' }
+    ],
     technologies: ['VEX IQ', 'C++', 'Touch LED Sensor', 'Color Sensor', 'Distance Sensor', 'Inertial Sensor', 'Control Systems'],
     githubUrl: 'https://github.com/BhavyaK07/MTE100-VEXROBOT-PROJECT',
     buttonText: "View Project"
@@ -93,6 +139,15 @@ export const projects: Project[] = [
       "Built a Firebase-powered dashboard with real-time telemetry and a points system that rewards or penalizes user care habits."
     ],
     image: botAutonomyImage,
+    imageFit: 'contain',
+    imageBg: '#fdf6e6',
+    pipeline: [
+      { label: 'Soil moisture + images', detail: 'Arduino Uno, ESP32-CAM' },
+      { label: 'Automatic watering', detail: 'Stepper motor' },
+      { label: 'Plant health evaluated', detail: 'ML pipeline' },
+      { label: 'Live dashboard', detail: 'Firebase' },
+      { label: 'Points + plant chatbot' }
+    ],
     technologies: ['Arduino Uno', 'ESP32-CAM', 'Firebase', 'Machine Learning', 'Embedded Systems', 'Web Dashboard'],
     githubUrl: 'https://github.com/BhavyaK07/BotAutonomy',
     devpostUrl: 'https://dorahacks.io/buidl/26416/',
@@ -111,6 +166,15 @@ export const projects: Project[] = [
       "Explored a pseudo-blockchain-style storage approach for volunteer hour records with a focus on data integrity and documentation speed."
     ],
     image: auroraImage,
+    imageFit: 'contain',
+    imageBg: '#ffffff',
+    pipeline: [
+      { label: 'Organization posts role' },
+      { label: 'Students search + filter', detail: 'Location, topic' },
+      { label: 'Student applies' },
+      { label: 'Applicants filtered', detail: 'Resume, past hours' },
+      { label: 'Hours recorded', detail: 'Pseudo-blockchain' }
+    ],
     technologies: ['Cloud Computing', 'Pseudo-Blockchain', 'Web App', 'Search & Filtering', 'Gamification', 'Data Security'],
     githubUrl: 'https://github.com/BhavyaK07/Aurora',
     devpostUrl: 'https://dorahacks.io/buidl/13404',
