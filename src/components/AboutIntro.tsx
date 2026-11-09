@@ -12,21 +12,6 @@ const AboutIntro: React.FC<AboutIntroProps> = ({ variant = 'card' }) => {
     'Mechatronics Design'
   ];
 
-  const strengths = [
-    {
-      title: 'Build Across Stack',
-      description: 'I connect firmware, hardware, and software into one reliable system.'
-    },
-    {
-      title: 'Move From Idea to Demo',
-      description: 'I prototype quickly, validate behavior, and iterate with real-world constraints.'
-    },
-    {
-      title: 'Engineer for Impact',
-      description: 'I focus on practical solutions that improve reliability, speed, and usability.'
-    }
-  ];
-
   const content = (
     <>
       <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent mb-3">
@@ -64,17 +49,6 @@ const AboutIntro: React.FC<AboutIntroProps> = ({ variant = 'card' }) => {
         </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-3">
-        {strengths.map((strength) => (
-          <div
-            key={strength.title}
-            className="info-tile-hover bg-dark-bg/70 border border-dark-border rounded-xl p-4"
-          >
-            <h3 className="text-sm font-semibold text-white mb-2">{strength.title}</h3>
-            <p className="text-sm text-gray-400 leading-relaxed">{strength.description}</p>
-          </div>
-        ))}
-      </div>
     </>
   );
 

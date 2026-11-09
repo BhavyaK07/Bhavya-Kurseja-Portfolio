@@ -1,82 +1,62 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { Analytics } from "@vercel/analytics/react";
 import Sidebar from './components/Sidebar';
 import ProjectsList from './components/ProjectsList';
 import About from './components/About';
 import MobileMenu from './components/MobileMenu';
-import Dither from './components/Dither';
-import './App.css';
+import { projects } from './data/projects';
+
+// three.js is most of the bundle; load the background separately so text paints first.
+const Dither = lazy(() => import('./components/Dither'));
+
+type Route = { section: string; projectSlug?: string };
+
+const SECTIONS = ['projects', 'all-projects', 'about', 'experience', 'skills'];
+
+const parseHash = (): Route => {
+  const hash = window.location.hash.replace('#', '');
+
+  if (hash.startsWith('project-')) {
+    const slug = hash.slice('project-'.length);
+    if (projects.some((project) => project.slug === slug)) {
+      return { section: 'project', projectSlug: slug };
+    }
+  }
+
+  // Unknown or empty hashes fall back to the main page.
+  return { section: SECTIONS.includes(hash) ? hash : 'projects' };
+};
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [currentSection, setCurrentSection] = useState('projects');
-
-  // Detect operating system
-  const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-  const isMobile = window.innerWidth < 1024; // lg breakpoint
+  const [route, setRoute] = useState<Route>(parseHash);
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const hashSection = window.location.hash.replace('#', '');
-      const validSections = ['projects', 'all-projects', 'about', 'experience', 'skills'];
-
-      if (!hashSection) {
-        setCurrentSection('projects');
-        return;
-      }
-
-      if (validSections.includes(hashSection)) {
-        setCurrentSection(hashSection);
-        return;
-      }
-
-      // Default unknown hashes to projects so main page remains visible.
-      setCurrentSection('projects');
-    };
-
-    // Set initial section based on hash
-    handleHashChange();
-
-    // Listen for hash changes
+    const handleHashChange = () => setRoute(parseHash());
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Keyboard shortcuts for desktop users
-  useEffect(() => {
-    if (isMobile) return; // Don't add keyboard shortcuts on mobile
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const modifierKey = isMac ? event.metaKey : event.ctrlKey;
-      
-      if (modifierKey && event.key === 'k') {
-        event.preventDefault();
-        setCurrentSection('projects');
-        window.location.hash = 'projects';
-      }
-    };
-
-    // Use capture phase to ensure the event is caught
-    window.addEventListener('keydown', handleKeyDown, true);
-    return () => window.removeEventListener('keydown', handleKeyDown, true);
-  }, [currentSection, isMac, isMobile]);
+  const { section, projectSlug } = route;
 
   return (
     <div className="min-h-screen bg-dark-bg relative">
       {/* Dither Background */}
       <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, opacity: 0.9 }}>
-        <Dither
-          waveColor={[0.18, 0.24, 0.34]}
-          disableAnimation={false}
-          enableMouseInteraction={false}
-          mouseRadius={0.3}
-          colorNum={4}
-          waveAmplitude={0.22}
-          waveFrequency={2.6}
-          waveSpeed={0.012}
-        />
+        <Suspense fallback={null}>
+          <Dither
+            waveColor={[0.18, 0.24, 0.34]}
+            disableAnimation={false}
+            enableMouseInteraction={false}
+            mouseRadius={0.3}
+            colorNum={4}
+            waveAmplitude={0.22}
+            waveFrequency={2.6}
+            waveSpeed={0.012}
+          />
+        </Suspense>
       </div>
-      
+
       <Analytics />
       <div className="relative z-10">
         {/* Mobile Menu Button */}
@@ -92,22 +72,25 @@ function App() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <MobileMenu onClose={() => setIsMobileMenuOpen(false)} currentSection={currentSection} />
+          <MobileMenu onClose={() => setIsMobileMenuOpen(false)} currentSection={section} />
         )}
 
         {/* Desktop Sidebar */}
         <div className="hidden lg:block">
-          <Sidebar currentSection={currentSection} />
+          <Sidebar currentSection={section} />
         </div>
-        
+
         {/* Main Content */}
-        <div className="lg:ml-[300px]">
-          {currentSection === 'about' ? (
+        <main className="lg:ml-[300px]">
+          {section === 'about' ? (
             <About />
           ) : (
-            <ProjectsList mode={currentSection === 'all-projects' ? 'all-projects' : 'default'} />
+            <ProjectsList
+              mode={section === 'project' ? 'detail' : section === 'all-projects' ? 'all-projects' : 'default'}
+              projectSlug={projectSlug}
+            />
           )}
-        </div>
+        </main>
       </div>
     </div>
   );

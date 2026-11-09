@@ -1,11 +1,13 @@
 import autoniMakeImage from '../assets/projects/autoniMake.jpeg';
 import auroraImage from '../assets/projects/aurora.png';
 import botAutonomyImage from '../assets/projects/botAutonomy.png';
-import pillBotImage from '../assets/projects/pillBot.png';
-import taqaVisionImage from '../assets/projects/taqaVision.png';
+import pillBotImage from '../assets/projects/pillBot.jpg';
+import taqaVisionImage from '../assets/projects/taqaVision.jpg';
 
 export interface Project {
   id: number;
+  /** URL-safe id used in links like #project-<slug> */
+  slug: string;
   title: string;
   featured?: boolean;
   description: string;
@@ -31,6 +33,7 @@ export const projects: Project[] = [
 
    {
     id: 1,
+    slug: 'taqa-vision',
     title: "TAQA Vision - AI Hard Hat QA System",
     featured: true,
     description: "Built an AI-powered hard hat QA system for Toyota manufacturing that lets workers verbally flag defective parts, triggering automatic database updates and robotic removal from the line.",
@@ -47,6 +50,7 @@ export const projects: Project[] = [
   },
   {
     id: 2,
+    slug: 'autonimake',
     title: "AutoniMake - Code-Free AI Robotics Platform",
     description: "Built a robotics prototyping platform that lets users connect computer vision model outputs to real hardware actions through a web interface.",
     highlights: [
@@ -62,6 +66,7 @@ export const projects: Project[] = [
   },
   {
     id: 3,
+    slug: 'pillbot',
     title: "PillBot - Autonomous Medicine Delivery Robot",
     description: "Engineered an autonomous medicine dispensing robot that lets a user choose pill quantity and destination room, then follows a matching color-coded route to deliver medication.",
     highlights: [
@@ -78,6 +83,7 @@ export const projects: Project[] = [
   },
   {
     id: 4,
+    slug: 'botautonomy',
     title: "BotAutonomy - Smart Plant Care System",
     featured: false,
     description: "Built a smart plant care system that blends hardware, software, and AI to monitor plant health, automate watering, and provide emotional feedback tied to care quality.",
@@ -94,6 +100,7 @@ export const projects: Project[] = [
   },
   {
     id: 5,
+    slug: 'aurora',
     title: "Aurora - Volunteer Discovery Platform",
     featured: false,
     description: "Built Aurora to help high school students find volunteering opportunities while giving organizations tools to post roles and review applicants.",
