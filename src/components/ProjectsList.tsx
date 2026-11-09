@@ -10,6 +10,20 @@ import virtekLogo from '../assets/logos/virtek.png';
 
 // The 3D viewer is only needed on project pages that have a model.
 const ModelViewer = lazy(() => import('./ModelViewer'));
+// Hero figure (three.js + a ~1 MB mesh); only loaded on screens wide enough to show it.
+const DitherHumanoid = lazy(() => import('./DitherHumanoid'));
+
+const WIDE_QUERY = '(min-width: 1280px)';
+function useIsWide() {
+  const [isWide, setIsWide] = useState(() => window.matchMedia(WIDE_QUERY).matches);
+  useEffect(() => {
+    const query = window.matchMedia(WIDE_QUERY);
+    const onChange = () => setIsWide(query.matches);
+    query.addEventListener('change', onChange);
+    return () => query.removeEventListener('change', onChange);
+  }, []);
+  return isWide;
+}
 
 interface ProjectsListProps {
   /** default = main page, all-projects = full-width tile grid, detail = one project's full-width page */
@@ -230,7 +244,7 @@ const ProjectImage: React.FC<{ project: Project; src?: string; lazy?: boolean; c
   return (
     <div
       className={`flex items-center justify-center overflow-hidden ${contain ? 'p-6' : ''} ${className}`}
-      style={{ backgroundColor: contain ? project.imageBg ?? '#0a0a0a' : '#0a0a0a' }}
+      style={{ backgroundColor: contain ? project.imageBg ?? '#000000' : '#000000' }}
     >
       <img
         src={src}
@@ -244,6 +258,7 @@ const ProjectImage: React.FC<{ project: Project; src?: string; lazy?: boolean; c
 };
 
 const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSlug }) => {
+  const isWide = useIsWide();
   const [mediaTab, setMediaTab] = useState<number | 'model'>(0);
 
   const selectedProject = projects.find((project) => project.slug === projectSlug) ?? null;
@@ -559,21 +574,32 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
 
   return (
     <div className="p-4 lg:p-8 pt-16 lg:pt-8 mt-16">
-      <section className="mb-12 max-w-4xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent mb-3">Bhavya Kurseja</p>
-        <h1 className="text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight">
-          Mechatronics student building robot perception and embedded systems.
-        </h1>
-        <p className="text-lg leading-8 text-gray-300 max-w-3xl">
-          I build across firmware, hardware, and software, with projects focused on real devices,
-          controls, sensing, and practical hardware-software integration.
-        </p>
+      <section className="mb-12 max-w-4xl xl:max-w-6xl">
+        <div className="xl:flex xl:items-center xl:gap-4">
+          <div className="max-w-4xl xl:flex-1">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent mb-3">Bhavya Kurseja</p>
+            <h1 className="text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight">
+              Mechatronics student building robot perception and embedded systems.
+            </h1>
+            <p className="text-lg leading-8 text-gray-300 max-w-3xl">
+              I build across firmware, hardware, and software, with projects focused on real devices,
+              controls, sensing, and practical hardware-software integration.
+            </p>
 
-        {/* Phones have no sidebar, so show availability here. */}
-        <p className="lg:hidden mt-5 inline-flex items-center gap-2 border border-dark-border bg-dark-card/80 px-3 py-1.5 text-sm text-gray-200">
-          <span className="h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true" />
-          {NEXT_COOP_TERM ? `Open to ${NEXT_COOP_TERM} co-op` : 'Open to co-op opportunities'}
-        </p>
+            {/* Phones have no sidebar, so show availability here. */}
+            <p className="lg:hidden mt-5 inline-flex items-center gap-2 border border-dark-border bg-dark-card/80 px-3 py-1.5 text-sm text-gray-200">
+              <span className="h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true" />
+              {NEXT_COOP_TERM ? `Open to ${NEXT_COOP_TERM} co-op` : 'Open to co-op opportunities'}
+            </p>
+          </div>
+
+          {/* Dithered Unitree G1 that turns toward the cursor; wide screens only, where there is room beside the text. */}
+          {isWide && (
+            <Suspense fallback={<div className="shrink-0 w-[340px] h-[400px] -my-12" />}>
+              <DitherHumanoid className="shrink-0 w-[340px] h-[400px] -my-12" />
+            </Suspense>
+          )}
+        </div>
 
         <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3">
           {focusTiles.map((tile) => (
