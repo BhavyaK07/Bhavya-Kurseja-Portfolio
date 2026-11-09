@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SiDevpost } from 'react-icons/si';
 import profileImg from '../assets/bhav.jpeg';
 
@@ -8,6 +8,14 @@ interface MobileMenuProps {
 }
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ onClose, currentSection }) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   const socialLinks = [
     {
       name: 'LinkedIn',
@@ -46,13 +54,17 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose, currentSection }) => {
   ];
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 lg:hidden">
-      <div className="fixed left-0 top-0 h-full w-80 bg-dark-bg p-6 flex flex-col justify-between">
+    <div className="fixed inset-0 bg-black/50 z-50 lg:hidden" onClick={onClose}>
+      <div
+        className="fixed left-0 top-0 h-full w-80 max-w-[85vw] bg-dark-bg p-6 flex flex-col justify-between overflow-y-auto"
+        onClick={(event) => event.stopPropagation()}
+      >
         <div>
           {/* Close Button */}
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            aria-label="Close menu"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -60,7 +72,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose, currentSection }) => {
           </button>
 
           {/* Profile Picture */}
-          <div className="flex flex-col items-center mb-12 mt-12 relative" style={{marginTop: '60px'}}>
+          <div className="flex flex-col items-center mb-8 mt-10 relative">
             <div className="relative">
               <button
                 onClick={() => {
@@ -176,7 +188,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose, currentSection }) => {
           </div>
         </div>
         {/* Social Links */}
-        <div className="flex justify-center space-x-6 mb-2" style={{marginTop: '-20px'}}>
+        <div className="flex justify-center space-x-6 mb-2">
           {socialLinks.map((link) => (
             <a
               key={link.name}

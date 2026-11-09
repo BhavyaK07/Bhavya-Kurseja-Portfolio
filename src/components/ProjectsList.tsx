@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa';
 import { SiDevpost } from 'react-icons/si';
 import { Project, projects } from '../data/projects';
@@ -83,6 +83,17 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
   const [isSlideVisible, setIsSlideVisible] = useState(true);
+  const [isCarouselInView, setIsCarouselInView] = useState(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const detailRef = useRef<HTMLDivElement>(null);
+
+  // Auto-advancing changes the carousel height, which shifts everything below it.
+  // Only autoplay on hover-capable devices (so hover can pause it), when the user
+  // hasn't asked for reduced motion, and only while the carousel is on screen.
+  const canAutoplay = useMemo(
+    () => window.matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches,
+    []
+  );
 
   const experiences = [
     {
@@ -213,8 +224,26 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
     if (mode === 'all-projects') {
       setSelectedProjectId(null);
       setSelectedMediaIndex(0);
+      // The #all-projects target doesn't exist until after this render, so the
+      // browser can't scroll to it natively; start the page from the top.
+      window.scrollTo(0, 0);
     }
   }, [mode]);
+
+  // Bring the detail view into view when it opens; otherwise the user is left
+  // at the scroll position of the card they clicked, mid-way through the detail.
+  useEffect(() => {
+    if (projectsView !== 'detail') return;
+    detailRef.current?.scrollIntoView({ block: 'start' });
+  }, [projectsView, selectedProjectId]);
+
+  useEffect(() => {
+    const node = carouselRef.current;
+    if (!node || !('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(([entry]) => setIsCarouselInView(entry.isIntersecting));
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [projectsView, mode]);
 
   useEffect(() => {
     setIsSlideVisible(false);
@@ -227,6 +256,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
 
   useEffect(() => {
     if (projectsView !== 'featured' || mode === 'all-projects' || isCarouselPaused) return;
+    if (!canAutoplay || !isCarouselInView) return;
 
     if (featuredProjects.length <= 1) return;
 
@@ -235,7 +265,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
     }, 5000);
 
     return () => window.clearInterval(intervalId);
-  }, [featuredProjects.length, isCarouselPaused, mode, projectsView]);
+  }, [canAutoplay, featuredProjects.length, isCarouselInView, isCarouselPaused, mode, projectsView]);
 
   useEffect(() => {
     if (featuredProjects.length === 0) return;
@@ -308,6 +338,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
   const renderFeaturedProjects = () => (
     <div className="mt-8">
       <div
+        ref={carouselRef}
         className="bg-dark-card/70 backdrop-blur-sm border border-dark-border rounded-2xl overflow-hidden"
         onMouseEnter={() => setIsCarouselPaused(true)}
         onMouseLeave={() => setIsCarouselPaused(false)}
@@ -467,7 +498,10 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
     if (!selectedProject) return null;
 
     return (
-      <div className="mt-8 bg-dark-card/70 backdrop-blur-sm border border-dark-border rounded-2xl overflow-hidden">
+      <div
+        ref={detailRef}
+        className="scroll-mt-8 mt-8 bg-dark-card/70 backdrop-blur-sm border border-dark-border rounded-2xl overflow-hidden"
+      >
         <div className="min-h-64 lg:min-h-[420px] bg-dark-bg flex items-center justify-center p-4 overflow-hidden">
           {renderMediaByIndex(selectedProject, selectedMediaIndex, true, 'contain')}
         </div>
@@ -494,8 +528,13 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <button
               onClick={() => {
-                setProjectsView('all');
                 setSelectedMediaIndex(0);
+                if (mode === 'all-projects') {
+                  setProjectsView('all');
+                } else {
+                  // The default page has no "all" view; go to the All Projects page instead.
+                  window.location.hash = 'all-projects';
+                }
               }}
               className="text-sm text-accent hover:text-accent/80 transition-colors duration-200 cursor-target"
             >
@@ -508,6 +547,9 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default' }) => {
                   onClick={() => {
                     setProjectsView('featured');
                     setSelectedMediaIndex(0);
+                    window.requestAnimationFrame(() => {
+                      document.getElementById('projects')?.scrollIntoView({ block: 'start' });
+                    });
                   }}
                   className="text-sm text-accent hover:text-accent/80 transition-colors duration-200 cursor-target"
                 >
