@@ -108,13 +108,6 @@ export const projects: Project[] = [
       "Used distance sensing to dispense the selected number of pills from the conveyor belt reliably at the destination."
     ],
     image: pillBotImage,
-    // PLACEHOLDER: demo shape so the 3D viewer can be previewed. Replace with the real CAD export
-    // (or delete this line) before merging to main.
-    model: {
-      url: '/models/placeholder-robot.stl',
-      format: 'stl',
-      caption: 'Placeholder model - real CAD coming soon'
-    },
     pipeline: [
       { label: 'Room + pill count chosen', detail: 'Remote control' },
       { label: 'Departure confirmed', detail: 'Touch LED' },
