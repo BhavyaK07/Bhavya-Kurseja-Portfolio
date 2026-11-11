@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import React, { useRef, useEffect, forwardRef } from 'react';
+import React, { useRef, useEffect, useState, forwardRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { EffectComposer, wrapEffect } from '@react-three/postprocessing';
 import { Effect } from 'postprocessing';
@@ -303,6 +303,23 @@ interface DitherProps {
   mouseRadius?: number;
 }
 
+// Stop rendering while the tab is hidden, and render a single still frame for
+// people who prefer reduced motion. The shader is full-screen, so this saves a
+// lot of battery on laptops and phones.
+function useFrameloop(): 'always' | 'demand' | 'never' {
+  const [hidden, setHidden] = useState(() => document.hidden);
+  const [reducedMotion] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  useEffect(() => {
+    const onVisibilityChange = () => setHidden(document.hidden);
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+  }, []);
+
+  if (hidden) return 'never';
+  return reducedMotion ? 'demand' : 'always';
+}
+
 export default function Dither({
   waveSpeed = 0.05,
   waveFrequency = 3,
@@ -314,12 +331,15 @@ export default function Dither({
   enableMouseInteraction = true,
   mouseRadius = 1
 }: DitherProps) {
+  const frameloop = useFrameloop();
+
   return (
     <Canvas
       className="dither-container"
       camera={{ position: [0, 0, 6] }}
       dpr={1}
-      gl={{ antialias: true, preserveDrawingBuffer: true }}
+      frameloop={frameloop}
+      gl={{ antialias: false, powerPreference: 'low-power' }}
     >
       <DitheredWaves
         waveSpeed={waveSpeed}
