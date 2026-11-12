@@ -16,7 +16,7 @@ const links = [
 const TopBar: React.FC<TopBarProps> = ({ current }) => (
   <header className="sticky top-0 z-30 border-b border-dark-border bg-dark-bg/85 backdrop-blur-md">
     <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 lg:px-8">
-      <a href="#top" className="font-bold text-white hover:text-accent transition-colors duration-200 cursor-target">
+      <a href="#top" className="font-medium tracking-tight text-ink hover:text-accent transition-colors duration-150 cursor-target">
         Bhavya Kurseja
       </a>
 
@@ -28,8 +28,8 @@ const TopBar: React.FC<TopBarProps> = ({ current }) => (
               key={link.hash}
               href={`#${link.hash}`}
               aria-current={isActive ? 'page' : undefined}
-              className={`px-3 py-2 text-sm transition-colors duration-200 cursor-target ${
-                isActive ? 'text-white border-b-2 border-accent' : 'text-gray-300 hover:text-white'
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150 cursor-target ${
+                isActive ? 'bg-dark-elevated text-ink' : 'text-muted hover:text-ink'
               }`}
             >
               {link.label}
@@ -39,7 +39,7 @@ const TopBar: React.FC<TopBarProps> = ({ current }) => (
         <a
           href={`mailto:${EMAIL}`}
           aria-label="Email Bhavya"
-          className="ml-1 inline-flex items-center gap-2 bg-accent px-3 py-2 text-sm font-semibold text-white hover:bg-accent/85 transition-colors duration-200 cursor-target"
+          className="btn-primary ml-1 h-9 px-4 cursor-target"
         >
           <FaEnvelope className="h-4 w-4" aria-hidden="true" />
           <span className="hidden sm:inline">Contact</span>
