@@ -4,6 +4,11 @@
 @tailwind utilities;
 
 @layer base {
+  /* Desktop sidebar width: grows with the viewport between 280px and 400px */
+  :root {
+    --sidebar-w: clamp(280px, 21vw, 400px);
+  }
+
   body {
     font-family: 'Inter', system-ui, sans-serif;
     background-color: #000000;

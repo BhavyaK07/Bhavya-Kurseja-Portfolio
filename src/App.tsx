@@ -130,7 +130,7 @@ function App() {
             </div>
 
             {/* Main Content */}
-            <main className="lg:ml-[300px]">
+            <main className="lg:ml-[var(--sidebar-w)]">
               <ProjectsList mode="default" />
             </main>
           </>
