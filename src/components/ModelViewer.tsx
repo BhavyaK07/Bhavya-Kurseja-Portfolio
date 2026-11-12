@@ -138,18 +138,18 @@ const ModelViewer: React.FC<ModelViewerProps> = ({ url, format, color = '#9ca3af
     <div className="relative w-full h-72 lg:h-[420px]">
       <div ref={containerRef} className="absolute inset-0 cursor-grab active:cursor-grabbing" aria-label={`3D model of ${title}`} role="img" />
       {status === 'loading' && (
-        <p className="absolute inset-0 flex items-center justify-center text-sm text-gray-400">Loading 3D model…</p>
+        <p className="absolute inset-0 flex items-center justify-center text-sm text-muted">Loading 3D model…</p>
       )}
       {status === 'error' && (
-        <p className="absolute inset-0 flex items-center justify-center text-sm text-gray-400">Couldn&apos;t load the 3D model.</p>
+        <p className="absolute inset-0 flex items-center justify-center text-sm text-muted">Couldn&apos;t load the 3D model.</p>
       )}
       {caption && status === 'ready' && (
-        <p className="pointer-events-none absolute top-3 left-3 border border-amber-500/40 bg-amber-500/10 px-2 py-1 text-xs text-amber-200">
+        <p className="award-pill pointer-events-none absolute top-3 left-3">
           {caption}
         </p>
       )}
       {status === 'ready' && (
-        <p className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/60 px-3 py-1 text-xs text-gray-300">
+        <p className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs text-body">
           Drag to rotate
         </p>
       )}

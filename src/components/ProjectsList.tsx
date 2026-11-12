@@ -71,7 +71,7 @@ const ProjectExternalLinks: React.FC<{ project: Project; className?: string }> =
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-11 h-11 flex items-center justify-center bg-dark-bg border border-dark-border text-gray-300 hover:text-accent hover:border-accent transition-colors duration-200 cursor-target"
+          className="icon-btn cursor-target"
           title={link.name}
           aria-label={`Open ${project.title} on ${link.name}`}
         >
@@ -85,8 +85,8 @@ const ProjectExternalLinks: React.FC<{ project: Project; className?: string }> =
 const BulletList: React.FC<{ items: string[]; className?: string }> = ({ items, className = 'space-y-2' }) => (
   <ul className={className}>
     {items.map((item) => (
-      <li key={item} className="text-gray-300 text-sm lg:text-base leading-relaxed flex items-start">
-        <span className="text-accent mr-2 mt-[2px]">•</span>
+      <li key={item} className="text-body text-sm lg:text-base leading-relaxed flex items-start">
+        <span className="text-muted-soft mr-2.5 mt-[2px]">•</span>
         <span>{item}</span>
       </li>
     ))}
@@ -96,7 +96,7 @@ const BulletList: React.FC<{ items: string[]; className?: string }> = ({ items, 
 const TagList: React.FC<{ tags: string[]; className?: string }> = ({ tags, className = '' }) => (
   <div className={`flex flex-wrap gap-2 ${className}`}>
     {tags.map((tag) => (
-      <span key={tag} className="bg-dark-bg border border-dark-border text-gray-300 px-2 py-1 text-xs font-mono">
+      <span key={tag} className="pill">
         {tag}
       </span>
     ))}
@@ -109,9 +109,8 @@ const SectionHeading: React.FC<{ id?: string; as?: 'h1' | 'h2'; children: React.
   children,
   className = ''
 }) => (
-  <div id={id} className={`scroll-mt-8 border-b border-dark-border pb-4 ${className}`}>
-    <Tag className="text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">{children}</Tag>
-    <div className="w-20 h-1 bg-accent"></div>
+  <div id={id} className={`scroll-mt-8 border-b border-dark-border pb-5 ${className}`}>
+    <Tag className="text-display-sm lg:text-display-md font-medium text-ink">{children}</Tag>
   </div>
 );
 
@@ -181,29 +180,6 @@ const skillGroups = [
     skills: ['Soldering', 'Bandsaw', 'Drill Press', 'Milling Machine', 'Lathe']
   }
 ];
-
-const skillHoverColors = [
-  { bg: 'rgba(37, 99, 235, 0.25)', border: '#3b82f6', text: '#bfdbfe', shadow: 'rgba(59, 130, 246, 0.28)' },
-  { bg: 'rgba(22, 163, 74, 0.22)', border: '#22c55e', text: '#bbf7d0', shadow: 'rgba(34, 197, 94, 0.24)' },
-  { bg: 'rgba(217, 119, 6, 0.23)', border: '#f59e0b', text: '#fde68a', shadow: 'rgba(245, 158, 11, 0.24)' },
-  { bg: 'rgba(124, 58, 237, 0.24)', border: '#8b5cf6', text: '#ddd6fe', shadow: 'rgba(139, 92, 246, 0.24)' },
-  { bg: 'rgba(219, 39, 119, 0.22)', border: '#ec4899', text: '#fbcfe8', shadow: 'rgba(236, 72, 153, 0.22)' },
-  { bg: 'rgba(14, 165, 233, 0.23)', border: '#38bdf8', text: '#bae6fd', shadow: 'rgba(56, 189, 248, 0.23)' },
-  { bg: 'rgba(20, 184, 166, 0.22)', border: '#2dd4bf', text: '#99f6e4', shadow: 'rgba(45, 212, 191, 0.22)' },
-  { bg: 'rgba(239, 68, 68, 0.22)', border: '#f87171', text: '#fecaca', shadow: 'rgba(248, 113, 113, 0.22)' },
-  { bg: 'rgba(132, 204, 22, 0.20)', border: '#a3e635', text: '#d9f99d', shadow: 'rgba(163, 230, 53, 0.20)' },
-  { bg: 'rgba(6, 182, 212, 0.22)', border: '#22d3ee', text: '#a5f3fc', shadow: 'rgba(34, 211, 238, 0.22)' },
-  { bg: 'rgba(168, 85, 247, 0.22)', border: '#c084fc', text: '#e9d5ff', shadow: 'rgba(192, 132, 252, 0.22)' },
-  { bg: 'rgba(244, 63, 94, 0.22)', border: '#fb7185', text: '#fecdd3', shadow: 'rgba(251, 113, 133, 0.22)' },
-  { bg: 'rgba(99, 102, 241, 0.24)', border: '#818cf8', text: '#c7d2fe', shadow: 'rgba(129, 140, 248, 0.24)' },
-  { bg: 'rgba(234, 88, 12, 0.22)', border: '#fb923c', text: '#fed7aa', shadow: 'rgba(251, 146, 60, 0.22)' }
-];
-
-const skillHoverColorByName = new Map(
-  skillGroups
-    .flatMap((group) => group.skills)
-    .map((skill, index) => [skill, skillHoverColors[index % skillHoverColors.length]])
-);
 
 const focusTiles = [
   { title: 'Perception & SLAM', detail: 'RTAB-Map VSLAM, RealSense D435i, GTSAM IMU fusion' },
@@ -308,7 +284,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
       {featuredProjects.map((project, index) => (
         <article
           key={project.id}
-          className="group bg-dark-card/70 backdrop-blur-sm border border-dark-border hover:border-accent/50 transition-colors duration-300 overflow-hidden"
+          className="card card-hover overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
             <a
@@ -320,23 +296,23 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
               <ProjectImage
                 project={project}
                 lazy={index > 0}
-                className="aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[340px] transition-transform duration-500 group-hover:scale-[1.02]"
+                className="aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[340px]"
               />
             </a>
 
             <div className="p-6 lg:p-8 flex flex-col">
               {project.award && (
-                <p className="mb-3 inline-flex w-fit items-center gap-2 border border-amber-500/40 bg-amber-500/10 px-2.5 py-1 text-xs font-semibold text-amber-200">
-                  <FaTrophy className="h-3 w-3 text-amber-400" aria-hidden="true" />
+                <p className="award-pill mb-4">
+                  <FaTrophy className="h-3 w-3" aria-hidden="true" />
                   {project.award}
                 </p>
               )}
               <a href={projectHref(project)} className="cursor-target">
-                <h3 className="text-2xl font-bold text-white mb-3 hover:text-accent transition-colors duration-200">
+                <h3 className="text-2xl font-medium tracking-tight text-ink mb-3 hover:text-accent transition-colors duration-150">
                   {project.title}
                 </h3>
               </a>
-              <p className="text-gray-300 leading-relaxed mb-5">{project.description}</p>
+              <p className="text-body leading-relaxed mb-5">{project.description}</p>
 
               {project.highlights && project.highlights.length > 0 && (
                 <BulletList
@@ -348,10 +324,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
               <TagList tags={project.technologies.slice(0, 6)} />
 
               <div className="mt-auto pt-6 flex flex-wrap items-center gap-3">
-                <a
-                  href={projectHref(project)}
-                  className="inline-flex items-center gap-2 bg-accent hover:bg-accent/80 text-white font-semibold py-2 px-4 transition-colors duration-200 cursor-target"
-                >
+                <a href={projectHref(project)} className="btn-primary cursor-target">
                   How it works
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -365,13 +338,10 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
       ))}
 
       <div className="flex justify-end">
-        <a
-          href="#all-projects"
-          className="group/all inline-flex items-center gap-2 border border-accent/60 bg-accent/10 text-white font-semibold py-2.5 px-5 transition-colors duration-200 hover:bg-accent/20 hover:border-accent cursor-target"
-        >
-          View All {projects.length} Projects
+        <a href="#all-projects" className="btn-secondary cursor-target">
+          View all {projects.length} projects
           <svg
-            className="w-4 h-4 transition-transform duration-300 group-hover/all:translate-x-1"
+            className="w-4 h-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -390,28 +360,24 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
         <div
           key={project.id}
           id={cardId(project)}
-          className="group flex flex-col bg-dark-card/70 backdrop-blur-sm border border-dark-border overflow-hidden hover:border-accent/50 transition-colors duration-200"
+          className="card card-hover flex flex-col overflow-hidden"
         >
           <a href={projectHref(project)} className="block cursor-target overflow-hidden" tabIndex={-1} aria-hidden="true">
-            <ProjectImage
-              project={project}
-              lazy
-              className="aspect-[16/10] transition-transform duration-500 group-hover:scale-[1.02]"
-            />
+            <ProjectImage project={project} lazy className="aspect-[16/10]" />
           </a>
-          <div className="p-5 flex flex-1 flex-col">
+          <div className="p-6 flex flex-1 flex-col">
             {project.award && (
-              <p className="mb-2 inline-flex w-fit items-center gap-1.5 text-xs font-semibold text-amber-300">
+              <p className="award-pill mb-3">
                 <FaTrophy className="h-3 w-3" aria-hidden="true" />
                 {project.award}
               </p>
             )}
             <a href={projectHref(project)} className="block cursor-target">
-              <h3 className="text-lg font-bold text-white mb-3 hover:text-accent transition-colors duration-200">
+              <h3 className="text-lg font-medium tracking-tight text-ink mb-3 hover:text-accent transition-colors duration-150">
                 {project.title}
               </h3>
             </a>
-            <p className="text-sm leading-relaxed text-gray-400 mb-4">{project.description}</p>
+            <p className="text-sm leading-relaxed text-muted mb-4">{project.description}</p>
             <TagList tags={project.technologies.slice(0, 5)} />
             <ProjectExternalLinks project={project} className="mt-auto pt-5" />
           </div>
@@ -435,7 +401,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
 
     return (
       <>
-        <article className="bg-dark-card/70 backdrop-blur-sm border border-dark-border overflow-hidden">
+        <article className="card rounded-2xl overflow-hidden">
           <div className="bg-dark-bg">
             {mediaTab === 'model' && project.model ? (
               <Suspense fallback={<div className="h-72 lg:h-[420px]" />}>
@@ -466,10 +432,8 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
                   role="tab"
                   aria-selected={mediaTab === tab.key}
                   onClick={() => setMediaTab(tab.key)}
-                  className={`text-xs uppercase tracking-wide px-3 py-1 border transition-colors duration-200 cursor-target ${
-                    mediaTab === tab.key
-                      ? 'border-accent text-accent bg-accent/10'
-                      : 'border-dark-border text-gray-300 bg-dark-bg hover:border-accent/60'
+                  className={`rounded-lg px-3.5 py-2 text-sm font-medium transition-colors duration-150 cursor-target ${
+                    mediaTab === tab.key ? 'bg-dark-elevated text-ink' : 'text-muted hover:text-ink'
                   }`}
                 >
                   {tab.label}
@@ -480,27 +444,27 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
 
           <div className="p-6 lg:p-8">
             {project.award && (
-              <p className="mb-3 inline-flex items-center gap-2 border border-amber-500/40 bg-amber-500/10 px-2.5 py-1 text-xs font-semibold text-amber-200">
-                <FaTrophy className="h-3 w-3 text-amber-400" aria-hidden="true" />
+              <p className="award-pill mb-4">
+                <FaTrophy className="h-3 w-3" aria-hidden="true" />
                 {project.award}
               </p>
             )}
-            <h1 className="text-2xl lg:text-3xl font-bold text-white mb-4">{project.title}</h1>
+            <h1 className="text-display-sm lg:text-display-md font-medium text-ink mb-8">{project.title}</h1>
             <div className="mb-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">Overview</p>
-              <p className="text-gray-300 text-base leading-relaxed">{project.description}</p>
+              <p className="eyebrow mb-3">Overview</p>
+              <p className="text-body text-base leading-relaxed">{project.description}</p>
             </div>
 
             {project.pipeline && project.pipeline.length > 0 && (
               <div className="mb-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">How It Works</p>
+                <p className="eyebrow mb-3">How It Works</p>
                 <SystemDiagram steps={project.pipeline} />
               </div>
             )}
 
             {project.highlights && project.highlights.length > 0 && (
               <div className="mb-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">What I Built</p>
+                <p className="eyebrow mb-3">What I Built</p>
                 <BulletList
                   items={project.award ? project.highlights.filter((h) => !h.startsWith('Awarded')) : project.highlights}
                 />
@@ -508,7 +472,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
             )}
 
             <div className="mb-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">Technologies Used</p>
+              <p className="eyebrow mb-3">Technologies Used</p>
               <TagList tags={project.technologies} />
             </div>
 
@@ -525,9 +489,9 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
             <a
               key={item.label}
               href={projectHref(item.project)}
-              className={`group border border-dark-border bg-dark-card/70 backdrop-blur-sm p-4 lg:p-5 hover:border-accent/60 transition-colors duration-200 cursor-target ${item.align}`}
+              className={`group card card-hover p-5 lg:p-6 cursor-target ${item.align}`}
             >
-              <span className={`flex items-center gap-1 text-xs uppercase tracking-[0.2em] text-accent ${item.label === 'Next' ? 'justify-end' : ''}`}>
+              <span className={`eyebrow flex items-center gap-1 ${item.label === 'Next' ? 'justify-end' : ''}`}>
                 {item.label === 'Previous' && (
                   <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.arrow} />
@@ -540,7 +504,7 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
                   </svg>
                 )}
               </span>
-              <span className="mt-1 block text-sm lg:text-base font-semibold text-white group-hover:text-accent transition-colors duration-200">
+              <span className="mt-2 block text-sm lg:text-base font-medium text-ink group-hover:text-accent transition-colors duration-150">
                 {item.project.title.split(' - ')[0]}
               </span>
             </a>
@@ -559,14 +523,14 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
       <div className="mx-auto max-w-6xl px-4 lg:px-8 py-8 lg:py-12">
         <a
           href="#projects"
-          className="inline-flex items-center gap-1 text-sm text-accent hover:text-accent/80 transition-colors duration-200 cursor-target"
+          className="text-link inline-flex items-center gap-1 text-sm cursor-target"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           Back to home
         </a>
-        <SectionHeading id="all-projects" as="h1" className="mt-4">ALL PROJECTS</SectionHeading>
+        <SectionHeading id="all-projects" as="h1" className="mt-6">All projects</SectionHeading>
         {renderProjectTiles()}
       </div>
     );
@@ -574,20 +538,20 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
 
   return (
     <div className="p-4 lg:p-8 pt-16 lg:pt-8 mt-16">
-      <section className="mb-12 max-w-4xl xl:max-w-6xl">
+      <section className="mb-24 max-w-4xl xl:max-w-6xl">
         <div className="xl:flex xl:items-center xl:gap-4">
           <div className="max-w-4xl xl:flex-1">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-accent mb-3">Bhavya Kurseja</p>
-            <h1 className="text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight">
+            <p className="eyebrow mb-4">Bhavya Kurseja</p>
+            <h1 className="text-4xl leading-[1.1] tracking-[-0.02em] lg:text-display-lg font-medium text-ink mb-6">
               Mechatronics student building robot perception and embedded systems.
             </h1>
-            <p className="text-lg leading-8 text-gray-300 max-w-3xl">
+            <p className="text-lg leading-8 text-body max-w-3xl">
               I build across firmware, hardware, and software, with projects focused on real devices,
               controls, sensing, and practical hardware-software integration.
             </p>
 
             {/* Phones have no sidebar, so show availability here. */}
-            <p className="lg:hidden mt-5 inline-flex items-center gap-2 border border-dark-border bg-dark-card/80 px-3 py-1.5 text-sm text-gray-200">
+            <p className="lg:hidden mt-6 inline-flex items-center gap-2 rounded-full border border-dark-border bg-dark-card/80 px-3.5 py-1.5 text-sm text-ink">
               <span className="h-2 w-2 rounded-full bg-emerald-400" aria-hidden="true" />
               {NEXT_COOP_TERM ? `Open to ${NEXT_COOP_TERM} co-op` : 'Open to co-op opportunities'}
             </p>
@@ -601,38 +565,31 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
           )}
         </div>
 
-        <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-3">
           {focusTiles.map((tile) => (
-            <div
-              key={tile.title}
-              className="focus-tile-hover group bg-dark-card/70 backdrop-blur-sm border border-dark-border p-4"
-            >
-              <p className="text-sm font-semibold text-white transition-colors duration-300 group-hover:text-blue-100">
-                {tile.title}
-              </p>
-              <p className="text-xs leading-5 text-gray-400 mt-2 transition-colors duration-300 group-hover:text-gray-300">
-                {tile.detail}
-              </p>
+            <div key={tile.title} className="card card-hover p-5">
+              <p className="text-sm font-medium text-ink">{tile.title}</p>
+              <p className="text-xs leading-5 text-muted mt-2">{tile.detail}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <SectionHeading id="projects" className="mb-2">FEATURED PROJECTS</SectionHeading>
+      <SectionHeading id="projects" className="mb-2">Featured projects</SectionHeading>
       {renderFeaturedProjects()}
 
-      <SectionHeading id="experience" className="mt-16">EXPERIENCE</SectionHeading>
+      <SectionHeading id="experience" className="mt-24">Experience</SectionHeading>
 
       <div className="mt-8 relative">
-        <div className="absolute left-3 top-3 bottom-3 hidden md:block w-px bg-gradient-to-b from-accent via-dark-border to-dark-border" />
-        <div className="space-y-5">
+        <div className="absolute left-3 top-3 bottom-3 hidden md:block w-px bg-dark-border" />
+        <div className="space-y-6">
           {experiences.map((experience) => (
             <article key={`${experience.org}-${experience.role}`} className="relative md:pl-10">
-              <div className="absolute left-0 top-6 hidden md:flex h-6 w-6 items-center justify-center rounded-full border border-accent bg-dark-bg">
-                <span className="h-2.5 w-2.5 rounded-full bg-accent" />
+              <div className="absolute left-0 top-7 hidden md:flex h-6 w-6 items-center justify-center rounded-full border border-dark-border bg-dark-bg">
+                <span className="h-2 w-2 rounded-full bg-muted" />
               </div>
 
-              <div className="bg-dark-card/75 backdrop-blur-sm border border-dark-border p-5 lg:p-6 transition-colors duration-200 hover:border-accent/50">
+              <div className="card card-hover p-6 lg:p-8">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-4">
                   <div className="flex items-start gap-4">
                     <img
@@ -640,19 +597,17 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
                       alt={`${experience.org} logo`}
                       loading="lazy"
                       decoding="async"
-                      className="h-12 w-12 lg:h-14 lg:w-14 shrink-0 object-contain bg-white"
+                      className="h-12 w-12 lg:h-14 lg:w-14 shrink-0 rounded-lg object-contain bg-white"
                     />
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-accent mb-2">
-                        {experience.focus}
-                      </p>
-                      <h3 className="text-lg lg:text-xl font-bold text-white">{experience.role}</h3>
-                      <p className="text-gray-300">{experience.org}</p>
+                      <p className="eyebrow mb-2">{experience.focus}</p>
+                      <h3 className="text-lg lg:text-xl font-medium tracking-tight text-ink">{experience.role}</h3>
+                      <p className="text-body">{experience.org}</p>
                     </div>
                   </div>
                   <div className="lg:text-right">
-                    <p className="text-sm font-medium text-gray-300">{experience.date}</p>
-                    <p className="text-sm text-gray-500">{experience.location}</p>
+                    <p className="text-sm font-medium text-body">{experience.date}</p>
+                    <p className="text-sm text-muted-soft">{experience.location}</p>
                   </div>
                 </div>
 
@@ -664,50 +619,31 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
         </div>
       </div>
 
-      <SectionHeading id="skills" className="mt-16">SKILLS</SectionHeading>
+      <SectionHeading id="skills" className="mt-24">Skills</SectionHeading>
 
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
         {skillGroups.map((group, index) => (
           <div
             key={group.title}
-            className={`bg-dark-card/70 backdrop-blur-sm border border-dark-border p-5 ${
+            className={`card card-hover p-6 ${
               skillGroups.length % 2 === 1 && index === skillGroups.length - 1 ? 'md:col-span-2' : ''
             }`}
           >
-            <h3 className="text-sm font-semibold text-accent mb-3 uppercase tracking-wide">{group.title}</h3>
-            <div className="flex flex-wrap gap-2">
-              {group.skills.map((skill) => {
-                const hoverColor = skillHoverColorByName.get(skill) ?? skillHoverColors[0];
-
-                return (
-                  <span
-                    key={skill}
-                    className="skill-pill-hover inline-block bg-dark-bg border border-dark-border text-gray-300 px-2 py-1 text-xs font-mono"
-                    style={{
-                      '--skill-hover-bg': hoverColor.bg,
-                      '--skill-hover-border': hoverColor.border,
-                      '--skill-hover-text': hoverColor.text,
-                      '--skill-hover-shadow': hoverColor.shadow
-                    } as React.CSSProperties}
-                  >
-                    {skill}
-                  </span>
-                );
-              })}
-            </div>
+            <h3 className="eyebrow mb-4">{group.title}</h3>
+            <TagList tags={group.skills} />
           </div>
         ))}
       </div>
 
-      <section className="mt-16 bg-dark-card/70 backdrop-blur-sm border border-dark-border p-6 lg:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+      <section className="card mt-24 p-6 lg:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">Education</p>
-          <h2 className="text-xl lg:text-2xl font-bold text-white">University of Waterloo</h2>
-          <p className="text-gray-300 mt-2">
+          <p className="eyebrow mb-3">Education</p>
+          <h2 className="text-xl lg:text-2xl font-medium tracking-tight text-ink">University of Waterloo</h2>
+          <p className="text-body mt-2">
             Bachelor of Applied Science in Honours Mechatronics Engineering (Co-op Program)
           </p>
         </div>
-        <p className="text-gray-400 text-sm md:text-right shrink-0">
+        <p className="text-muted text-sm md:text-right shrink-0">
           Sept 2025 - Present
           <br className="hidden md:block" />
           <span className="md:hidden"> | </span>
@@ -715,30 +651,28 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
         </p>
       </section>
 
-      <section id="contact" className="scroll-mt-8 mt-16 pb-4">
-        <div className="relative overflow-hidden border border-accent/35 bg-dark-card/85 p-6 lg:p-8 shadow-[0_0_40px_rgba(59,130,246,0.12)]">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent to-transparent" />
+      {/* Contact card: dark surface with a faint accent wash */}
+      <section id="contact" className="scroll-mt-8 mt-24 pb-4">
+        <div className="card border-accent/25 bg-gradient-to-br from-accent/[0.08] via-dark-card/80 to-dark-card/80 p-8 lg:p-12">
           <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:items-center">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent mb-3">Contact</p>
-              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4 tracking-tight">
-                Let&apos;s build real systems.
-              </h2>
-              <p className="text-lg leading-8 text-gray-300">
+              <p className="eyebrow mb-3">Contact</p>
+              <h2 className="text-display-sm lg:text-display-md font-medium text-ink mb-4">Let&apos;s build real systems.</h2>
+              <p className="text-lg leading-8 text-body">
                 I&apos;m open to co-op opportunities in embedded robotics, computer vision, and
                 hardware-software integration.
               </p>
             </div>
 
-            <div className="border border-dark-border bg-dark-bg/80 p-4 lg:p-5">
+            <div>
               <a
                 href={emailHref}
-                className="group mb-3 inline-flex w-full items-center justify-center gap-2 bg-accent px-4 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent/85 hover:shadow-lg hover:shadow-accent/25 cursor-target"
+                className="btn-primary mb-3 h-11 w-full cursor-target"
               >
                 <FaEnvelope className="w-4 h-4" />
-                Email Me
+                Email me
               </a>
-              <p className="mb-3 text-center text-xs text-gray-500 font-mono select-all">{EMAIL}</p>
+              <p className="mb-4 text-center text-xs text-muted-soft font-mono select-all">{EMAIL}</p>
 
               <div className="grid grid-cols-2 gap-2">
                 {contactLinks.map((link) => (
@@ -747,11 +681,9 @@ const ProjectsList: React.FC<ProjectsListProps> = ({ mode = 'default', projectSl
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center justify-center gap-2 border border-dark-border bg-dark-card/80 px-4 py-3 text-sm font-semibold text-gray-300 transition-all duration-200 hover:border-accent hover:bg-accent/15 hover:text-white cursor-target"
+                    className="btn-secondary h-11 cursor-target"
                   >
-                    <span className="text-gray-500 transition-colors duration-200 group-hover:text-accent">
-                      {link.icon}
-                    </span>
+                    {link.icon}
                     <span>{link.label}</span>
                   </a>
                 ))}

@@ -1,44 +1,62 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  /* Desktop sidebar width: grows with the viewport between 280px and 400px */
+  :root {
+    --sidebar-w: clamp(280px, 21vw, 400px);
+  }
+
   body {
     font-family: 'Inter', system-ui, sans-serif;
     background-color: #000000;
-    color: #ffffff;
+    color: #fafafa;
   }
 }
 
 @layer components {
-  .focus-tile-hover {
-    @apply relative overflow-hidden transition-all duration-300 ease-out hover:-translate-y-1 hover:border-accent/70 hover:bg-blue-950/40 hover:shadow-lg hover:shadow-accent/20;
+  /* Small uppercase label above headings and content blocks */
+  .eyebrow {
+    @apply text-xs font-medium uppercase tracking-[0.12em] text-muted;
   }
 
-  .focus-tile-hover::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(120deg, transparent 0%, rgba(59, 130, 246, 0.18) 45%, transparent 70%);
-    transform: translateX(-120%);
-    transition: transform 500ms ease;
-    pointer-events: none;
+  /* Content card: 12px radius, hairline border, no shadow */
+  .card {
+    @apply rounded-xl border border-dark-border bg-dark-card/70 backdrop-blur-sm;
   }
 
-  .focus-tile-hover:hover::before {
-    transform: translateX(120%);
+  /* Low-key hover lift for interactive tiles: small rise, faint accent edge */
+  .card-hover {
+    @apply transition-[transform,border-color,background-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:border-accent/40 hover:bg-dark-elevated/70 hover:shadow-[0_8px_24px_-12px_rgba(59,130,246,0.35)];
   }
 
-  .skill-pill-hover {
-    @apply transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg;
+  .btn {
+    @apply inline-flex h-10 items-center justify-center gap-2 rounded-lg px-5 text-sm font-medium transition-colors duration-150;
   }
 
-  .skill-pill-hover:hover {
-    background-color: var(--skill-hover-bg);
-    border-color: var(--skill-hover-border);
-    color: var(--skill-hover-text);
-    box-shadow: 0 10px 24px var(--skill-hover-shadow);
+  .btn-primary {
+    @apply btn bg-accent text-white hover:bg-accent-active;
   }
 
+  .btn-secondary {
+    @apply btn border border-dark-border bg-dark-bg/80 text-ink hover:border-hairline-strong hover:bg-dark-elevated;
+  }
+
+  .icon-btn {
+    @apply flex h-10 w-10 items-center justify-center rounded-full border border-dark-border bg-dark-bg/80 text-muted transition-colors duration-150 hover:border-hairline-strong hover:text-ink;
+  }
+
+  .pill {
+    @apply inline-block rounded-full bg-dark-elevated px-3 py-1 font-mono text-xs text-body;
+  }
+
+  .award-pill {
+    @apply inline-flex w-fit items-center gap-1.5 rounded-full bg-award/10 px-3 py-1 text-xs font-medium text-award;
+  }
+
+  .text-link {
+    @apply text-accent underline-offset-4 hover:underline;
+  }
 }
